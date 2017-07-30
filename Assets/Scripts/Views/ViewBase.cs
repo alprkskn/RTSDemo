@@ -21,7 +21,7 @@ namespace RTSDemo
 
         public virtual void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            MethodInfo method = GetType().GetMethod(e.PropertyName + "Changed");
+            MethodInfo method = GetType().GetMethod(e.PropertyName + "Changed", BindingFlags.NonPublic);
 
             if (method == null)
             {
