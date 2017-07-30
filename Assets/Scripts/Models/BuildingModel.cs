@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingModel : MonoBehaviour {
+namespace RTSDemo
+{
+    public class BuildingModel : ModelBase
+    {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
 }

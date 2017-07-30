@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RTSDemo
 {
-    public class UnitModel : ModelBase
+    public class GameController : ControllerBase
     {
 
     }
