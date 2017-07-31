@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 224094189599017210}
   - component: {fileID: 114677323048953180}
   - component: {fileID: 114167751817694768}
+  - component: {fileID: 114568319995635250}
   m_Layer: 0
   m_Name: GameView
   m_TagString: Untagged
@@ -442,6 +443,7 @@ MonoBehaviour:
   _gridContent: {fileID: 224011106925689426}
   _informationPanel: {fileID: 224099369589004810}
   _informationPanelContent: {fileID: 224720739814052926}
+  _gridManager: {fileID: 114568319995635250}
 --- !u!114 &114173667459781446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -773,6 +775,17 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &114568319995635250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1155407062029340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd66f1fa317d59b41a851f69531f6232, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114618990688284054
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -16,6 +16,7 @@ namespace RTSDemo
         public virtual void InitModelView(ModelBase model, ViewBase view)
         {
             model.PropertyChanged += view.ModelPropertyChanged;
+            model.CollectionModified += view.ModelCollectionModified;
             _viewToModel.Add(view, model);
         }
 

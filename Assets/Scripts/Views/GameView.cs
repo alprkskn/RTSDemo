@@ -13,12 +13,12 @@ namespace RTSDemo
         [SerializeField] private RectTransform _gridContent;
         [SerializeField] private RectTransform _informationPanel;
         [SerializeField] private RectTransform _informationPanelContent;
+        [SerializeField] private GridManager _gridManager;
 
         #endregion
 
 
-        private GridManager _gridManager;
-
+        #region PropertyListenerMethods
 
         protected virtual void MapSizeChanged(object model, Vector2 mapSize)
         {
@@ -30,10 +30,23 @@ namespace RTSDemo
             
         }
 
+        protected virtual void BuildingsAdd(object model, BuildingModel building)
+        {
+            
+        }
+
         protected virtual void UnitsChanged(object model, List<UnitModel> units)
         {
             
         }
+
+        protected virtual void UnitsAdd(object model, UnitModel unit)
+        {
+            
+        }
+
+        #endregion
+
 
         protected override void Start()
         {
