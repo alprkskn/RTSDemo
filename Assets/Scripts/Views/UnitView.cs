@@ -4,18 +4,8 @@ using UnityEngine;
 
 namespace RTSDemo
 {
-    public class UnitView : ViewBase
+    public class UnitView : EntityView
     {
-        protected virtual void CoordXChanged(object model, int coordX)
-        {
-            
-        }
-
-        protected virtual void CoordYChanged(object model, int coordY)
-        {
-            
-        }
-
         protected override void Start()
         {
 

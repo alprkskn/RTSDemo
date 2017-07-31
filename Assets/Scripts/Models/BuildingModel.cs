@@ -5,51 +5,8 @@ using UnityEngine.UI;
 
 namespace RTSDemo
 {
-    public class BuildingModel : ModelBase, IInfoPanelElement
+    public class BuildingModel : EntityModel, IInfoPanelElement
     {
-        private int _width, _height;
-        private int _coordX, _coordY;
-
-        public int Width
-        {
-            get { return _width; }
-            set
-            {
-                _width = value;
-                NotifyPropertyChange("Width", value);
-            }
-        }
-
-        public int Height
-        {
-            get { return _height; }
-            set
-            {
-                _height = value;
-                NotifyPropertyChange("Height", value);
-            }
-        }
-
-        public int CoordX
-        {
-            get { return _coordX; }
-            set
-            {
-                _coordX = value;
-                NotifyPropertyChange("CoordX", value);
-            }
-        }
-
-        public int CoordY
-        {
-            get { return _coordY; }
-            set
-            {
-                _coordY = value;
-                NotifyPropertyChange("CoordY", value);
-            }
-        }
-
         public virtual string GetInfoTitle()
         {
             return "";

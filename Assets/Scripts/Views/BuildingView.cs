@@ -4,28 +4,8 @@ using UnityEngine;
 
 namespace RTSDemo
 {
-    public class BuildingView : ViewBase
+    public class BuildingView : EntityView
     {
-        protected virtual void WidthChanged(object model, int width)
-        {
-            
-        }
-
-        protected virtual void HeightChanged(object model, int height)
-        {
-            
-        }
-
-        protected virtual void CoordXChanged(object model, int coordX)
-        {
-            
-        }
-
-        protected virtual void CoordYChanged(object model, int coordY)
-        {
-            
-        }
-
         protected override void Start()
         {
 
