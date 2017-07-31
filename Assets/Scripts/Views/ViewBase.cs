@@ -39,26 +39,28 @@ namespace RTSDemo
 
         public virtual void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            MethodInfo method = GetType().GetMethod(e.PropertyName + "Changed", BindingFlags.NonPublic);
+            MethodInfo method = GetType().GetMethod(e.PropertyName + "Changed",
+                BindingFlags.Instance | BindingFlags.NonPublic);
 
             if (method == null)
             {
                 throw new Exception(string.Format("Cannot find the method to invoke for {0} in {1}.", e.PropertyName, GetType().Name));
             }
 
-            method.Invoke(this, new[] {sender, e});
+            method.Invoke(this, new[] {sender, e.Value});
         }
 
         public virtual void ModelCollectionModified(object sender, CollectionModifiedEventArgs e)
         {
-            MethodInfo method = GetType().GetMethod(e.PropertyName + e.ModificationType, BindingFlags.NonPublic);
+            MethodInfo method = GetType().GetMethod(e.PropertyName + e.ModificationType, 
+                BindingFlags.Instance | BindingFlags.NonPublic);
             
             if (method == null)
             {
                 throw new Exception(string.Format("Cannot find the method to invoke for {0} in {1}.", e.PropertyName, GetType().Name));
             }
 
-            method.Invoke(this, new[] {sender, e});
+            method.Invoke(this, new[] {sender, e.Value});
         }
 
         public virtual void OnDestroyed()

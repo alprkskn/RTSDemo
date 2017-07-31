@@ -23,7 +23,7 @@ namespace RTSDemo
 
         protected virtual void MapSizeChanged(object model, Vector2 mapSize)
         {
-            
+            Debug.Log(mapSize);
         }
 
         protected virtual void BuildingsChanged(object model, List<BuildingModel> buildings)
@@ -65,7 +65,7 @@ namespace RTSDemo
 
         protected override void Update()
         {
-
+            // TODO: Keep track of Input.Mouse to fire the mouse events below.
         }
 
         private void OnMouseUp(int x, int y, MouseButton btn)

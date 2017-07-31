@@ -6,7 +6,7 @@ namespace RTSDemo
 {
     public class ResourcesManager : Singleton<ResourcesManager>
     {
-        [SerializeField] private readonly string _viewsPath;
+        [SerializeField] private string _viewsPath;
 
         private Dictionary<string, ViewBase> _viewsDict;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,14 +9,31 @@ namespace RTSDemo
     // entry point to the game.
     public class AppRoot : Singleton<AppRoot>
     {
+        [SerializeField] private GameObject _canvasPrefab;
+        // Whole window is rendered by a single canvas.
+        // This will keep the Transform of that.
+        private RectTransform _canvas;
+        private GameView _gameView;
+
+        public RectTransform Canvas
+        {
+            get { return _canvas; }
+        }
+
+        public GameView GameView
+        {
+            get { return _gameView; }
+        }
+
         private Dictionary<string, ControllerBase> _controllerDict;
 
-        // Use this for initialization
+
         void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
             _controllerDict = new Dictionary<string, ControllerBase>();
 
+            // Populate the _controllerDict
             foreach (var controller in this.GetComponentsInChildren<ControllerBase>())
             {
                 var baseName = controller.BaseName;
@@ -25,9 +43,31 @@ namespace RTSDemo
 
                 _controllerDict.Add(baseName, controller);
             }
+
+            // Initialize the canvas
+            _canvas = Instantiate(_canvasPrefab).GetComponent<RectTransform>();
+            _canvas.name = "Canvas";
         }
 
-        // Update is called once per frame
+        // Since application will immediately start the game
+        // This callback method could be used for the initialization.
+        void Start()
+        {
+            // Exclusive to this class. I'm creating Game Model and View manually.
+            // Since these will be created only once. There is no need for other means.
+            GameModel game = new GameModel();
+            _gameView = ViewFactory.CreateViewForModel<GameView>(game);
+            _gameView.transform.SetParent(_canvas, false);
+
+            game.MapSize = new Vector2(20, 20);
+            game.Units = new List<UnitModel>();
+            game.Buildings = new List<BuildingModel>();
+            game.AvailableBuildingTypes = new List<Type>();
+
+            Debug.Log("Done");
+
+        }
+
         void Update()
         {
 
