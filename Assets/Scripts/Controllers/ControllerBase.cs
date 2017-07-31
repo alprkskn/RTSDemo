@@ -6,6 +6,24 @@ namespace RTSDemo
 {
     public abstract class ControllerBase : Singleton<ControllerBase>
     {
+        public string BaseName
+        {
+            get
+            {
+                var typeName = this.GetType().Name;
+
+                if (typeName.Substring(typeName.Length - "Controller".Length) != "Controller")
+                {
+                    Debug.LogErrorFormat("Class for the controller: {0} is not properly named.\n" +
+                                         "This method expects names ending with \"Controller\"", typeName);
+                    return "";
+                }
+
+                var baseName = typeName.Substring(0, typeName.Length - "Controller".Length);
+                return baseName;
+            }
+        }
+
         protected Dictionary<ViewBase, ModelBase> _viewToModel;
 
         protected virtual void Awake()

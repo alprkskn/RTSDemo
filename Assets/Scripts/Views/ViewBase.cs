@@ -9,6 +9,24 @@ namespace RTSDemo
     public abstract class ViewBase : MonoBehaviour
     {
 
+        public string BaseName
+        {
+            get
+            {
+                var typeName = typeof(T).Name;
+
+                if (typeName.Substring(typeName.Length - "View".Length) != "View")
+                {
+                    Debug.LogErrorFormat("Class for the view: {0} is not properly named.\n" +
+                                         "This method expects names ending with \"View\"", typeName);
+                    return "";
+                }
+
+                var baseName = typeName.Substring(0, typeName.Length - "View".Length);
+                return baseName;
+            }
+        }
+
         protected virtual void Start()
         {
 

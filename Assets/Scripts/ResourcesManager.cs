@@ -16,8 +16,12 @@ namespace RTSDemo
 
             foreach (var view in Resources.LoadAll<ViewBase>(_viewsPath))
             {
-                var name = view.name.Substring(0, view.name.Length - 4);
-                _viewsDict.Add(name, view);
+                var name = view.BaseName;
+
+                if (name != "")
+                {
+                    _viewsDict.Add(name, view);
+                }
             }
         }
 
