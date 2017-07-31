@@ -6,6 +6,10 @@ namespace RTSDemo
 {
     public class BuildingView : EntityView
     {
+        protected void PlacedChanged(object sender, bool placed)
+        {
+        }
+
         protected override void Start()
         {
 

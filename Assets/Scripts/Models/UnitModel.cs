@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,9 +23,9 @@ namespace RTSDemo
             return false;
         }
 
-        public virtual List<IInfoPanelElement> GetProductList()
+        public virtual List<Type> GetProductList()
         {
-            return new List<IInfoPanelElement>();
+            return new List<Type>();
         }
     }
 }
