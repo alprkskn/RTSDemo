@@ -13,7 +13,7 @@ namespace RTSDemo
         {
             get
             {
-                var typeName = typeof(T).Name;
+                var typeName = this.GetType().Name;
 
                 if (typeName.Substring(typeName.Length - "View".Length) != "View")
                 {

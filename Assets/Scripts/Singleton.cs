@@ -2,8 +2,8 @@
 
 /// Taken from "http://wiki.unity3d.com/index.php/Singleton"
 /// It is extended from MonoBehaviour since it utilizes some
-/// pretty helpful functionality of Unity3D and it really makes
-/// sense in this context
+/// pretty helpful functionality of Unity3D and it makes
+/// sense in this context.
  
 /// <summary>
 /// Be aware this will not prevent a non singleton constructor
