@@ -9,12 +9,12 @@ namespace RTSDemo
     {
         public virtual string GetInfoTitle()
         {
-            return "";
+            return Name;
         }
 
         public virtual Image GetThumbnailImage()
         {
-            return null;
+            return UiImage;
         }
 
         public virtual bool HasProduction()

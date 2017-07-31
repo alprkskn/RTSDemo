@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,6 +44,11 @@ namespace RTSDemo
         protected virtual void UnitsAdd(object model, UnitModel unit)
         {
             
+        }
+
+        protected virtual void AvailableBuildingTypesChanged(object model, List<Type> availableBuildings)
+        {
+            // TODO: Later this will gather the images and pass them to an InfiniteScrollView.
         }
 
         #endregion
