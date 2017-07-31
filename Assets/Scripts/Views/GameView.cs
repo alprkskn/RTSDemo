@@ -24,6 +24,10 @@ namespace RTSDemo
         protected virtual void MapSizeChanged(object model, Vector2 mapSize)
         {
             Debug.Log(mapSize);
+
+            // TODO: Get Cell size from a Constants class.
+            _gridContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,  mapSize.x * 32);
+            _gridContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,  mapSize.y * 32);
         }
 
         protected virtual void BuildingsChanged(object model, List<BuildingModel> buildings)
