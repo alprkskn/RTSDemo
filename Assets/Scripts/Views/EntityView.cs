@@ -42,8 +42,6 @@ namespace RTSDemo
             
         }
 
-
-
         protected override void Start()
         {
 

@@ -6,7 +6,19 @@ namespace RTSDemo
 {
     public class GameView : ViewBase
     {
+        #region SerializedFields
+        [SerializeField] private RectTransform _productionMenu;
+        [SerializeField] private RectTransform _productionMenuContent;
+        [SerializeField] private RectTransform _gameBoard;
+        [SerializeField] private RectTransform _gridContent;
+        [SerializeField] private RectTransform _informationPanel;
+        [SerializeField] private RectTransform _informationPanelContent;
+
+        #endregion
+
+
         private GridManager _gridManager;
+
 
         protected virtual void MapSizeChanged(object model, Vector2 mapSize)
         {
