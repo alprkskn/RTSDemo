@@ -54,6 +54,11 @@ namespace RTSDemo
         {
             _buildingPlacement.CoordX = coordX;
             _buildingPlacement.CoordY = coordY;
+
+            var available = !GridManager.Instance.CheckOverlap(coordX, coordY, _buildingPlacement.Width, _buildingPlacement.Height,
+                GridLayers.Buildings | GridLayers.Units);
+
+            _buildingPlacement.PlacementAvailable = available;
         }
 
         private void OnBoardClickRegistered(GameView sender, int coordX, int coordY, UnityEngine.EventSystems.PointerEventData.InputButton btn)
@@ -63,7 +68,7 @@ namespace RTSDemo
             // This will not select units.
             if (_buildingPlacement != null)
             {
-                var available = GridManager.Instance.CheckOverlap(coordX, coordY, _buildingPlacement.Width, _buildingPlacement.Height,
+                var available = !GridManager.Instance.CheckOverlap(coordX, coordY, _buildingPlacement.Width, _buildingPlacement.Height,
                     GridLayers.Buildings | GridLayers.Units);
 
                 if (available)

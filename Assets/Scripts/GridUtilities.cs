@@ -20,12 +20,15 @@ namespace RTSDemo
 
             if (x + width >= map.GetLength(0) || y + height >= map.GetLength(1)) return true;
 
-            for(int i = 0; i < width; i++)
-                for(int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
                     if ((map[x + i, y + j] & layerMask) != 0)
-                        return false;
-
-            return true;
+                        return true;
+                }
+            }
+            return false;
         }
 
     }
