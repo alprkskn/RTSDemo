@@ -31,6 +31,7 @@ namespace RTSDemo
             {
                 _mapImage.color = Color.green;
             }
+            else
             {
                 _mapImage.color = Color.red;
             }
