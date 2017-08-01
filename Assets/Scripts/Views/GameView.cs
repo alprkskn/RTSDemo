@@ -37,7 +37,7 @@ namespace RTSDemo
         private Vector3[] _gameBoardCorners;
 
         private InfiniteScrollView _productionMenuScrollView;
-        private bool _trackMouseHover;
+        private bool _trackMouseHover = false;
         #endregion
 
         #region PropertyListenerMethods
@@ -46,6 +46,9 @@ namespace RTSDemo
         {
             _gameBoardContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,  mapSize.x * GameConstants.CellSize);
             _gameBoardContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,  mapSize.y * GameConstants.CellSize);
+
+            // For now this will refresh the grid without really cleanin the rest.
+            GridManager.Instance.InitializeMap(mapSize);
         }
 
         protected virtual void BuildingsChanged(object model, List<BuildingModel> buildings)
@@ -55,7 +58,7 @@ namespace RTSDemo
 
         protected virtual void BuildingsAdd(object model, BuildingModel building)
         {
-            
+            GridManager.Instance.UpdateMap(building.CoordX, building.CoordY, building.Width, building.Height, GridLayers.Buildings);
         }
 
         protected virtual void UnitsChanged(object model, List<UnitModel> units)
@@ -167,6 +170,11 @@ namespace RTSDemo
         public void OnMouseExit(BaseEventData e)
         {
             _trackMouseHover = false;
+        }
+
+        public void AddToMap(ViewBase child)
+        {
+            child.GetComponent<Transform>().SetParent(_gameBoardContent, false);
         }
 
     }

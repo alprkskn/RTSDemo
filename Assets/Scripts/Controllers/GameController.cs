@@ -53,7 +53,7 @@ namespace RTSDemo
         private void OnBoardHoverRegistered(GameView sender, int coordX, int coordY)
         {
             _buildingPlacement.CoordX = coordX;
-            _buildingPlacement.CoordY = coordX;
+            _buildingPlacement.CoordY = coordY;
         }
 
         private void OnBoardClickRegistered(GameView sender, int coordX, int coordY, UnityEngine.EventSystems.PointerEventData.InputButton btn)
@@ -68,6 +68,7 @@ namespace RTSDemo
 
                 if (available)
                 {
+                    model.AddBuilding(_buildingPlacement);
                     _buildingPlacement.Placed = true;
                     _buildingPlacement = null;
                     sender.BoardHoverRegistered -= OnBoardHoverRegistered;

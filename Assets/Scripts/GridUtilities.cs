@@ -22,7 +22,7 @@ namespace RTSDemo
 
             for(int i = 0; i < width; i++)
                 for(int j = 0; j < height; j++)
-                    if ((map[i, j] & layerMask) != 0)
+                    if ((map[x + i, y + j] & layerMask) != 0)
                         return false;
 
             return true;

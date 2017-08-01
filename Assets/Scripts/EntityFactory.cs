@@ -15,7 +15,7 @@ namespace RTSDemo
         {
             var model = new BarracksModel();
             var view = ViewFactory.CreateViewForModel<BarracksView>(model);
-            view.GetComponent<Transform>().SetParent(parentView.transform, false);
+            parentView.AddToMap(view);
 
             model.Placed = false;
             model.Width = (int)GameConstants.BarracksSize.x;
@@ -30,7 +30,7 @@ namespace RTSDemo
         {
             var model = new PowerPlantModel();
             var view = ViewFactory.CreateViewForModel<PowerPlantView>(model);
-            view.GetComponent<Transform>().SetParent(parentView.transform, false);
+            parentView.AddToMap(view);
 
             model.Placed = false;
             model.Width = (int)GameConstants.PowerPlantSize.x;
@@ -44,7 +44,7 @@ namespace RTSDemo
         {
             var model = new SoldierModel();
             var view = ViewFactory.CreateViewForModel<UnitView>(model);
-            view.GetComponent<Transform>().SetParent(parentView.transform, false);
+            parentView.AddToMap(view);
 
             return model;
         }

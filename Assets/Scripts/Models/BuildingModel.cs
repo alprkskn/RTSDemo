@@ -13,6 +13,8 @@ namespace RTSDemo
         /// </summary>
         private bool _placed;
 
+        private bool _placementAvailable;
+
         public bool Placed
         {
             get { return _placed; }
@@ -20,6 +22,16 @@ namespace RTSDemo
             {
                 _placed = value;
                 NotifyPropertyChange("Placed", value);
+            }
+        }
+
+        public bool PlacementAvailable
+        {
+            get { return _placementAvailable; }
+            set
+            {
+                _placementAvailable = value;
+                NotifyPropertyChange("PlacementAvailable", value);
             }
         }
 

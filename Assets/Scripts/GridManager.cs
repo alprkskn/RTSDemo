@@ -27,6 +27,17 @@ namespace RTSDemo
             return GridUtilities.Overlap(map, coordX, coordY, width, height, (short) layerMask);
         }
 
+        public void UpdateMap(int coordX, int coordY, int width, int height, GridLayers layer)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    map[coordX + i, coordY + j] = (short)layer;
+                }
+            }
+        }
+
         // Use this for initialization
         void Start()
         {

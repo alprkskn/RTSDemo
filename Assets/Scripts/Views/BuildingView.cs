@@ -19,6 +19,21 @@ namespace RTSDemo
             {
                 _mapImage.color = Color.white;
             }
+            else
+            {
+                _mapImage.color = Color.red;
+            }
+        }
+
+        protected void PlacementAvailableChanged(object sender, bool placementAvailable)
+        {
+            if (placementAvailable)
+            {
+                _mapImage.color = Color.green;
+            }
+            {
+                _mapImage.color = Color.red;
+            }
         }
 
         protected override void MapImageChanged(object model, Sprite mapImage)
@@ -45,18 +60,18 @@ namespace RTSDemo
         {
             base.CoordXChanged(model, coordX);
             float x = coordX * GameConstants.CellSize;
-            var pos = _rectTransform.localPosition;
+            var pos = _rectTransform.anchoredPosition;
             pos.x = x;
-            _rectTransform.localPosition = pos;
+            _rectTransform.anchoredPosition = pos;
         }
 
         protected override void CoordYChanged(object model, int coordY)
         {
             base.CoordYChanged(model, coordY);
             float y = coordY * GameConstants.CellSize;
-            var pos = _rectTransform.localPosition;
-            pos.y = y;
-            _rectTransform.localPosition = pos;
+            var pos = _rectTransform.anchoredPosition;
+            pos.y = -y;
+            _rectTransform.anchoredPosition = pos;
         }
 
         protected override void Awake()
