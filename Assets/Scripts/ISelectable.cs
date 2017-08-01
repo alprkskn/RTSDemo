@@ -8,5 +8,6 @@ namespace RTSDemo
     {
         void OnSelection();
         void OnDeSelection();
+        bool CheckOverlap(int coordX, int coordY);
     }
 }

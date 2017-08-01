@@ -84,14 +84,20 @@ namespace RTSDemo
         }
         
 
-        public void OnSelection()
+        public virtual  void OnSelection()
         {
             throw new System.NotImplementedException();
         }
 
-        public void OnDeSelection()
+        public virtual void OnDeSelection()
         {
             throw new System.NotImplementedException();
+        }
+
+        public bool CheckOverlap(int coordX, int coordY)
+        {
+            return GridUtilities.RectOverlap(coordX, coordY, 1, 1,
+                _coordX, _coordY, _width, _height);
         }
     }
 }

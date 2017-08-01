@@ -6,6 +6,11 @@ namespace RTSDemo
 {
     public class GameController : ControllerBase
     {
+        #region PrivateFields
+
+        private ISelectable _currentSelection = null;
+
+        #endregion
         public override void InitModelView(ModelBase model, ViewBase view)
         {
             base.InitModelView(model, view);
@@ -22,6 +27,17 @@ namespace RTSDemo
             foreach (var selectable in model.Selectables)
             {
                 // Check given coords with Rectangles of selectables.
+                if (selectable.CheckOverlap(coordX, coordY))
+                {
+                    if (_currentSelection != null)
+                    {
+                        _currentSelection.OnDeSelection();
+                    }
+
+                    selectable.OnSelection();
+                    _currentSelection = selectable;
+                    break;
+                }
             }
 
         }

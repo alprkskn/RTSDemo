@@ -14,16 +14,16 @@ namespace RTSDemo
         // These will most probably be changed with 
         // derived models tomorrow.
 
-        public static BuildingModel CreateBuilding()
+        public static BarracksModel CreateBarracks()
         {
-            var model = new BuildingModel();
+            var model = new BarracksModel();
             ViewFactory.CreateViewForModel<BuildingView>(model);
             return model;
         }
 
-        public static UnitModel CreateUnit()
+        public static SoldierModel CreateUnit()
         {
-            var model = new UnitModel();
+            var model = new SoldierModel();
             ViewFactory.CreateViewForModel<UnitView>(model);
             return model;
         }

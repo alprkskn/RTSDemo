@@ -12,7 +12,7 @@ namespace RTSDemo
         private List<UnitModel> _units;
         private List<Type> _availableBuildingTypes;
 
-        private List<ISelectable> _selectables = new List<ISelectable>();
+        private readonly List<ISelectable> _selectables = new List<ISelectable>();
 
         #region PropertyListenerMethods
 
