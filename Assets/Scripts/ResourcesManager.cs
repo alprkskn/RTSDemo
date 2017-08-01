@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RTSDemo
 {
@@ -47,6 +48,16 @@ namespace RTSDemo
             if (_viewsDict.ContainsKey(viewName))
             {
                 return _viewsDict[viewName];
+            }
+
+            return null;
+        }
+
+        public Sprite GetSprite(string spriteName)
+        {
+            if (_spritesDict.ContainsKey(spriteName))
+            {
+                return _spritesDict[spriteName];
             }
 
             return null;

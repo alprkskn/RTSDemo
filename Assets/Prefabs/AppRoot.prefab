@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewsPath: Views
+  _spritesPath: Sprites
 --- !u!114 &114930204060439998
 MonoBehaviour:
   m_ObjectHideFlags: 1

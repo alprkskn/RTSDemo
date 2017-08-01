@@ -27,6 +27,11 @@ namespace RTSDemo
             }
         }
 
+        protected virtual void Awake()
+        {
+            
+        }
+
         protected virtual void Start()
         {
             // 2 is an arbitrary number.

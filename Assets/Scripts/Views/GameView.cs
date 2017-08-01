@@ -31,6 +31,7 @@ namespace RTSDemo
         // BottomLeft - TopLeft - TopRight - BottomRight
         private Vector3[] _gameBoardCorners;
 
+        private InfiniteScrollView _productionMenuScrollView;
         #endregion
 
         #region PropertyListenerMethods
@@ -64,16 +65,33 @@ namespace RTSDemo
         protected virtual void AvailableBuildingTypesChanged(object model, List<Type> availableBuildings)
         {
             // TODO: Later this will gather the images and pass them to an InfiniteScrollView.
+            var typeDict = new Dictionary<Type, Sprite>();
+
+            foreach (var availableBuilding in availableBuildings)
+            {
+                // Assuming only the correct types are sent.
+                // Don't really have time, so I cannot include
+                // correctness checks everywhere. :/
+                var typeName = availableBuilding.Name.Substring(0, availableBuilding.Name.Length - 5);
+                typeDict.Add(availableBuilding,
+                    ResourcesManager.Instance.GetSprite(typeName));
+            }
+
+            _productionMenuScrollView.SetAvailableElements(typeDict);
         }
 
         #endregion
 
+        protected override void Awake()
+        {
+            base.Awake();
+            _productionMenuScrollView = _productionMenuContent.GetComponent<InfiniteScrollView>();
+        }
 
         protected override void Start()
         {
             base.Start();
             _gridManager = GridManager.Instance;
-
         }
 
         protected override void UIStart()
