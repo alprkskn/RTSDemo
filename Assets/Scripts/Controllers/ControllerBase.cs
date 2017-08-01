@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RTSDemo
@@ -43,10 +44,21 @@ namespace RTSDemo
             return view != null ? _viewToModel[view] : null;
         }
 
-        protected void DestroyView(ViewBase view)
+        public void DestroyView(ViewBase view)
         {
             view.OnDestroyed();
             _viewToModel.Remove(view);
+        }
+
+        public void DestroyModel(ModelBase model)
+        {
+            var views = _viewToModel.Where(x => x.Value == model).ToList();
+
+            foreach (var keyValuePair in views)
+            {
+                keyValuePair.Key.OnDestroyed();
+                _viewToModel.Remove(keyValuePair.Key);
+            }
         }
 
     }

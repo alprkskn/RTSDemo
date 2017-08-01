@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class InfiniteScrollView : MonoBehaviour
 {
+    public event Action<Element> ElementSelected; 
+
     public class Element
     {
         public Sprite Content;
@@ -124,8 +126,13 @@ public class InfiniteScrollView : MonoBehaviour
                 entry.TransformHandle.SetParent(Content, false);
                 entry.Element = _availableContentList[elementTypeCursor];
                 entry.Initialize();
-                // TODO: Set entry's visuals.
-                //element.GetComponentInChildren<Text>().text = _availableContentList[elementTypeCursor];
+                entry.Selected += (e) =>
+                {
+                    if (ElementSelected != null)
+                    {
+                        ElementSelected(e.Element);
+                    }
+                };
 
                 _entries.Add(entry);
 
@@ -206,17 +213,27 @@ public class InfiniteScrollView : MonoBehaviour
                 for (int i = 0; i < _currentGridWidth; i++)
                 {
                     //var cursor = (yOffset < 0) ? _entries.Count - 1 : elementCursor - i;
-                    var element = rowElements[_currentGridWidth * rowInProgress + i];
+                    var entry = rowElements[_currentGridWidth * rowInProgress + i];
 
-                    element.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor) * AppRoot.Instance.Canvas.scaleFactor;
-                    element.TransformHandle.SetParent(Content, false);
+                    entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor) * AppRoot.Instance.Canvas.scaleFactor;
+                    entry.TransformHandle.SetParent(Content, false);
 
                     // TODO: Reset the entries visuals.
+                    entry.Initialize();
+                    entry.Selected += (e) =>
+                    {
+                        if (ElementSelected != null)
+                        {
+                            ElementSelected(e.Element);
+                        }
+                    };
+
+
                     //element.TransformHandle.GetComponentInChildren<Text>().text = _availableContentList[elementTypeCursor];
                     elementTypeCursor = (elementTypeCursor + 1) % _availableContentList.Count;
 
                     //_entries.RemoveAt(cursor);
-                    _entries.Insert((yOffset < 0) ? (rowInProgress * _currentGridWidth) + i : _entries.Count, element);
+                    _entries.Insert((yOffset < 0) ? (rowInProgress * _currentGridWidth) + i : _entries.Count, entry);
                 }
 
                 replacedRows--;

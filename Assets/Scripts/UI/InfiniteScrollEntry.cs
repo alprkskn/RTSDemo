@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InfiniteScrollEntry : MonoBehaviour
 {
+    public event Action<InfiniteScrollEntry> Selected; 
+
     private RectTransform _transformHandle;
 
     public RectTransform TransformHandle
@@ -15,12 +19,15 @@ public class InfiniteScrollEntry : MonoBehaviour
     public InfiniteScrollView.Element Element;
 
     private Image _thumbnail;
+    private Button _button;
+
 
     // Use this for initialization
     void Awake()
     {
         _transformHandle = GetComponent<RectTransform>();
-        _thumbnail = GetComponent<Image>();
+        _thumbnail = _transformHandle.Find("Image").GetComponent<Image>();
+        _button = GetComponent<Button>();
     }
 
     // Update is called once per frame
@@ -33,5 +40,19 @@ public class InfiniteScrollEntry : MonoBehaviour
     {
         // TODO: Set Image and callback func.
         _thumbnail.sprite = Element.Content;
+        _button.onClick.RemoveAllListeners();
+        
+        // Clear old listeners.
+        Selected = null;
+
+        _button.onClick.AddListener(() =>
+        {
+            Debug.Log(Element.RepresentedType.Name);
+            EventSystem.current.SetSelectedGameObject(null);
+            if (Selected != null)
+            {
+                Selected(this);
+            }
+        });
     }
 }

@@ -10,21 +10,38 @@ namespace RTSDemo
     /// </summary>
     public static class EntityFactory
     {
-        // TODO: These methods are placeholders.
-        // These will most probably be changed with 
-        // derived models tomorrow.
-
-        public static BarracksModel CreateBarracks()
+        public static BarracksModel CreateBarracks(GameView parentView)
         {
             var model = new BarracksModel();
-            ViewFactory.CreateViewForModel<BuildingView>(model);
+            var view = ViewFactory.CreateViewForModel<BuildingView>(model);
+            view.GetComponent<Transform>().SetParent(parentView.transform, false);
+
+            model.Placed = false;
+            model.Width = (int) GameConstants.BarracksSize.x;
+            model.Height = (int) GameConstants.BarracksSize.y;
+
             return model;
         }
 
-        public static SoldierModel CreateUnit()
+        public static PowerPlantModel CreatePowerPlant(GameView parentView)
+        {
+            var model = new PowerPlantModel();
+            var view = ViewFactory.CreateViewForModel<BuildingView>(model);
+            view.GetComponent<Transform>().SetParent(parentView.transform, false);
+
+            model.Placed = false;
+            model.Width = (int) GameConstants.PowerPlantSize.x;
+            model.Height = (int) GameConstants.PowerPlantSize.y;
+
+            return model;
+        }
+
+        public static SoldierModel CreateSoldier(GameView parentView)
         {
             var model = new SoldierModel();
-            ViewFactory.CreateViewForModel<UnitView>(model);
+            var view = ViewFactory.CreateViewForModel<UnitView>(model);
+            view.GetComponent<Transform>().SetParent(parentView.transform, false);
+
             return model;
         }
     }

@@ -7,12 +7,17 @@ using UnityEngine.EventSystems;
 namespace RTSDemo
 {
     public delegate void BoardClickEventHandler(GameView sender, int coordX, int coordY, PointerEventData.InputButton btn);
+    public delegate void BoardHoverEventHandler(GameView sender, int coordX, int coordY);
+
+    public delegate void BuildingProductionHandler(GameView sender, Type buildingType);
 
     public class GameView : ViewBase
     {
         #region Events
 
         public event BoardClickEventHandler BoardClickRegistered;
+        public event BoardHoverEventHandler BoardHoverRegistered;
+        public event BuildingProductionHandler BuildingProductionStart;
 
         #endregion
 
@@ -32,6 +37,7 @@ namespace RTSDemo
         private Vector3[] _gameBoardCorners;
 
         private InfiniteScrollView _productionMenuScrollView;
+        private bool _trackMouseHover;
         #endregion
 
         #region PropertyListenerMethods
@@ -78,6 +84,13 @@ namespace RTSDemo
             }
 
             _productionMenuScrollView.SetAvailableElements(typeDict);
+            _productionMenuScrollView.ElementSelected += element =>
+            {
+                if (BuildingProductionStart != null)
+                {
+                    BuildingProductionStart(this, element.RepresentedType);
+                }
+            };
         }
 
         #endregion
@@ -104,6 +117,17 @@ namespace RTSDemo
         protected override void Update()
         {
             base.Update();
+            if (_trackMouseHover)
+            {
+                Vector2 mapPosition = (Vector2)Input.mousePosition - (Vector2) _gameBoardCorners[1];
+                mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
+                int coordX = (int)mapPosition.x / GameConstants.CellSize;
+                int coordY = (int)-mapPosition.y / GameConstants.CellSize;
+                if (BoardHoverRegistered != null)
+                {
+                    BoardHoverRegistered(this, coordX, coordY);
+                }
+            }
         }
 
         public void OnMouseClick(BaseEventData e)
@@ -134,6 +158,17 @@ namespace RTSDemo
 
             // TODO: Later movement can be limited to clamp the map to borders.   
         }
+
+        public void OnMouseEnter(BaseEventData e)
+        {
+            _trackMouseHover = true;
+        }
+
+        public void OnMouseExit(BaseEventData e)
+        {
+            _trackMouseHover = false;
+        }
+
     }
 
 }
