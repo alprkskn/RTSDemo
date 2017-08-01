@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RTSDemo
@@ -7,7 +8,7 @@ namespace RTSDemo
     public interface IInfoPanelElement
     {
         string GetInfoTitle();
-        Image GetThumbnailImage();
+        Sprite GetThumbnailImage();
         bool HasProduction();
         List<Type> GetProductList();
     }

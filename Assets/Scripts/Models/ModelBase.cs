@@ -32,6 +32,25 @@ namespace RTSDemo
         public event PropertyChangedEventHandler PropertyChanged;
         public event CollectionModifiedEventHandler CollectionModified;
 
+        public string BaseName
+        {
+            get
+            {
+                var typeName = this.GetType().Name;
+
+                if (typeName.Substring(typeName.Length - "Model".Length) != "Model")
+                {
+                    Debug.LogErrorFormat("Class for the model: {0} is not properly named.\n" +
+                                         "This method expects names ending with \"Model\"", typeName);
+                    return "";
+                }
+
+                var baseName = typeName.Substring(0, typeName.Length - "Model".Length);
+                return baseName;
+            }
+        }
+
+
         protected void NotifyPropertyChange(string propName, object value)
         {
             if (PropertyChanged != null)

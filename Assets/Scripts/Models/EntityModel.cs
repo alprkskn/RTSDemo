@@ -10,8 +10,8 @@ namespace RTSDemo
         private int _coordX, _coordY;
         private int _width, _height;
         private string _name;
-        private Image _mapImage;
-        private Image _uiImage;
+        private Sprite _mapImage;
+        private Sprite _uiImage;
 
         public int Width
         {
@@ -63,7 +63,7 @@ namespace RTSDemo
             }
         }
 
-        public Image MapImage
+        public Sprite MapImage
         {
             get { return _mapImage; }
             set
@@ -73,7 +73,7 @@ namespace RTSDemo
             }
         }
 
-        public Image UiImage
+        public Sprite UiImage
         {
             get { return _uiImage; }
             set

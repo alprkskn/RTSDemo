@@ -28,7 +28,7 @@ namespace RTSDemo
             return Name;
         }
 
-        public virtual Image GetThumbnailImage()
+        public virtual Sprite GetThumbnailImage()
         {
             return UiImage;
         }

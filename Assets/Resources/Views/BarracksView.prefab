@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224957815866781504}
   - component: {fileID: 222314003350254980}
   - component: {fileID: 114097662848066164}
-  - component: {fileID: 114472459723251502}
+  - component: {fileID: 114808954977320794}
   m_Layer: 5
   m_Name: BarracksView
   m_TagString: Untagged
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114472459723251502
+--- !u!114 &114808954977320794
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -64,9 +64,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1342404270097546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49d9c97772d889f42a40c2ac78399a03, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c5b6e4923f1fc7499a27a76ddc26074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mapImage: {fileID: 114097662848066164}
 --- !u!222 &222314003350254980
 CanvasRenderer:
   m_ObjectHideFlags: 1

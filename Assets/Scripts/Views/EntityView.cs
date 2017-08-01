@@ -32,12 +32,12 @@ namespace RTSDemo
             
         }
 
-        protected virtual void MapImageChanged(object model, Image mapImage)
+        protected virtual void MapImageChanged(object model, Sprite mapImage)
         {
             
         }
 
-        protected virtual void UiImageChanged(object model, Image uiImage)
+        protected virtual void UiImageChanged(object model, Sprite uiImage)
         {
             
         }

@@ -13,7 +13,7 @@ namespace RTSDemo
             return "";
         }
 
-        public virtual Image GetThumbnailImage()
+        public virtual Sprite GetThumbnailImage()
         {
             return null;
         }
