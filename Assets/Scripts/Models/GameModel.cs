@@ -11,6 +11,7 @@ namespace RTSDemo
         private List<BuildingModel> _buildings;
         private List<UnitModel> _units;
         private List<Type> _availableBuildingTypes;
+        private ISelectable _selectedEntity;
 
         private readonly List<ISelectable> _selectables = new List<ISelectable>();
 
@@ -53,6 +54,16 @@ namespace RTSDemo
             {
                 _availableBuildingTypes = value;
                 NotifyPropertyChange("AvailableBuildingTypes", value);
+            }
+        }
+
+        public ISelectable SelectedEntity
+        {
+            get { return _selectedEntity; }
+            set
+            {
+                _selectedEntity = value;
+                NotifyPropertyChange("SelectedEntity", value);
             }
         }
 

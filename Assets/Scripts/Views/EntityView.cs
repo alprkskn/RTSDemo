@@ -42,6 +42,11 @@ namespace RTSDemo
             
         }
 
+        protected virtual void HighlightedChanged(object model, bool highlighted)
+        {
+            
+        }
+
         protected override void Start()
         {
 

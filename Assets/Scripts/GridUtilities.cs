@@ -10,8 +10,12 @@ namespace RTSDemo
         public static bool RectOverlap(int sourceX, int sourceY, int sourceW, int sourceH,
             int targetX, int targetY, int targetW, int targetH)
         {
-            return (sourceX < targetX + targetW && sourceX + sourceW > targetX &&
-                    sourceY > targetY + targetH && sourceY + sourceH < targetY);
+            return !(sourceX + sourceW < targetX ||
+                        targetX + targetW < sourceX || 
+                        sourceY + sourceH < targetY ||
+                        targetY + targetH < sourceY);
+            //return (sourceX < targetX + targetW && sourceX + sourceW > targetX &&
+            //sourceY > targetY + targetH && sourceY + sourceH < targetY);
         }
 
         public static bool Overlap(short[,] map, int x, int y, int width, int height, short layerMask)

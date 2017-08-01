@@ -81,11 +81,13 @@ namespace RTSDemo
             }
             else
             {
+                bool hit = false;
                 foreach (var selectable in model.Selectables)
                 {
                     // Check given coords with Rectangles of selectables.
                     if (selectable.CheckOverlap(coordX, coordY))
                     {
+                        hit = true;
                         if (_currentSelection != null)
                         {
                             _currentSelection.OnDeSelection();
@@ -93,8 +95,16 @@ namespace RTSDemo
 
                         selectable.OnSelection();
                         _currentSelection = selectable;
+                        model.SelectedEntity = selectable;
                         break;
                     }
+                }
+
+                if (!hit)
+                {
+                    _currentSelection.OnDeSelection();
+                    _currentSelection = null;
+                    model.SelectedEntity = null;
                 }
             }
         }

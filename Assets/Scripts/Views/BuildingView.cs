@@ -37,6 +37,19 @@ namespace RTSDemo
             }
         }
 
+        protected override void HighlightedChanged(object model, bool highlighted)
+        {
+            base.HighlightedChanged(model, highlighted);
+            if (highlighted)
+            {
+                _mapImage.color = Color.yellow;
+            }
+            else
+            {
+                _mapImage.color = Color.white;
+            }
+        }
+
         protected override void MapImageChanged(object model, Sprite mapImage)
         {
             base.MapImageChanged(model, mapImage);

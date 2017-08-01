@@ -66,6 +66,11 @@ namespace RTSDemo
             
         }
 
+        protected virtual void SelectedEntityChanged(object model, ISelectable selectable)
+        {
+            
+        }
+
         protected virtual void UnitsAdd(object model, UnitModel unit)
         {
             
