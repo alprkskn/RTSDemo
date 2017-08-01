@@ -2,32 +2,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace RTSDemo
 {
+    public delegate void BoardClickEventHandler(GameView sender, int coordX, int coordY, PointerEventData.InputButton btn);
+
     public class GameView : ViewBase
     {
+        #region Events
+
+        public event BoardClickEventHandler BoardClickRegistered;
+
+        #endregion
+
         #region SerializedFields
         [SerializeField] private RectTransform _productionMenu;
         [SerializeField] private RectTransform _productionMenuContent;
         [SerializeField] private RectTransform _gameBoard;
-        [SerializeField] private RectTransform _gridContent;
+        [SerializeField] private RectTransform _gameBoardContent;
         [SerializeField] private RectTransform _informationPanel;
         [SerializeField] private RectTransform _informationPanelContent;
         [SerializeField] private GridManager _gridManager;
-
         #endregion
 
+        #region PrivateFields
+
+        // BottomLeft - TopLeft - TopRight - BottomRight
+        private Vector3[] _gameBoardCorners;
+
+        #endregion
 
         #region PropertyListenerMethods
 
         protected virtual void MapSizeChanged(object model, Vector2 mapSize)
         {
-            Debug.Log(mapSize);
-
-            // TODO: Get Cell size from a Constants class.
-            _gridContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,  mapSize.x * 32);
-            _gridContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,  mapSize.y * 32);
+            _gameBoardContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,  mapSize.x * GameConstants.CellSize);
+            _gameBoardContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,  mapSize.y * GameConstants.CellSize);
         }
 
         protected virtual void BuildingsChanged(object model, List<BuildingModel> buildings)
@@ -60,33 +71,50 @@ namespace RTSDemo
 
         protected override void Start()
         {
+            base.Start();
             _gridManager = GridManager.Instance;
-            _gridManager.MouseUp += OnMouseUp;
-            _gridManager.MouseDown += OnMouseDown;
-            _gridManager.MouseClick += OnMouseClick;
-            _gridManager.MouseHover += OnMouseHover;
+
+        }
+
+        protected override void UIStart()
+        {
+            base.UIStart();
+            _gameBoardCorners = new Vector3[4];
+            _gameBoardContent.GetWorldCorners(_gameBoardCorners);
         }
 
         protected override void Update()
         {
-            // TODO: Keep track of Input.Mouse to fire the mouse events below.
+            base.Update();
         }
 
-        private void OnMouseUp(int x, int y, MouseButton btn)
+        public void OnMouseClick(BaseEventData e)
         {
-            
+            PointerEventData ptrData = (PointerEventData) e;
+
+            Vector2 mapPosition = ptrData.position - (Vector2) _gameBoardCorners[1];
+
+            // Canvas scales all elements to fit them into the current screen.
+            // So the actual world positions change.
+            // Hence, mapPosition is normalized before finding the coordinates.2
+            mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
+
+            int coordX = (int) mapPosition.x / GameConstants.CellSize;
+            int coordY = (int) -mapPosition.y / GameConstants.CellSize;
+
+            if (BoardClickRegistered != null)
+            {
+                BoardClickRegistered(this, coordX, coordY, ptrData.button);
+            }
         }
-        private void OnMouseDown(int x, int y, MouseButton btn)
+
+        public void OnMouseDrag(BaseEventData e)
         {
-            
-        }
-        private void OnMouseClick(int x, int y, MouseButton btn)
-        {
-            
-        }
-        private void OnMouseHover(int x, int y, MouseButton btn)
-        {
-            
+            PointerEventData ptrData = (PointerEventData) e;
+            _gameBoardContent.Translate(ptrData.delta);
+            _gameBoardContent.GetWorldCorners(_gameBoardCorners);
+
+            // TODO: Later movement can be limited to clamp the map to borders.   
         }
     }
 

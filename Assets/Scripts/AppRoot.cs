@@ -12,18 +12,25 @@ namespace RTSDemo
         [SerializeField] private GameObject _canvasPrefab;
         // Whole window is rendered by a single canvas.
         // This will keep the Transform of that.
-        private RectTransform _canvas;
+        private RectTransform _canvasTransform;
+        private Canvas _canvas;
         private GameView _gameView;
 
-        public RectTransform Canvas
+        public Canvas Canvas
         {
             get { return _canvas; }
+        }
+
+        public RectTransform CanvasTransform
+        {
+            get { return _canvasTransform; }
         }
 
         public GameView GameView
         {
             get { return _gameView; }
         }
+
 
         private Dictionary<string, ControllerBase> _controllerDict;
 
@@ -45,8 +52,9 @@ namespace RTSDemo
             }
 
             // Initialize the canvas
-            _canvas = Instantiate(_canvasPrefab).GetComponent<RectTransform>();
-            _canvas.name = "Canvas";
+            _canvasTransform = Instantiate(_canvasPrefab).GetComponent<RectTransform>();
+            _canvasTransform.name = "CanvasTransform";
+            _canvas = _canvasTransform.GetComponent<Canvas>();
         }
 
         // Since application will immediately start the game
@@ -57,14 +65,13 @@ namespace RTSDemo
             // Since these will be created only once. There is no need for other means.
             GameModel game = new GameModel();
             _gameView = ViewFactory.CreateViewForModel<GameView>(game);
-            _gameView.transform.SetParent(_canvas, false);
+            _gameView.transform.SetParent(_canvasTransform, false);
 
             game.MapSize = new Vector2(20, 20);
             game.Units = new List<UnitModel>();
             game.Buildings = new List<BuildingModel>();
             game.AvailableBuildingTypes = new List<Type>();
 
-            Debug.Log("Done");
 
         }
 

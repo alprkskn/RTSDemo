@@ -122,5 +122,14 @@ namespace RTSDemo
         }
 
         #endregion
+
+        #region StandardProperties
+
+        public List<ISelectable> Selectables
+        {
+            get { return _selectables; }
+        }
+
+        #endregion
     }
 }

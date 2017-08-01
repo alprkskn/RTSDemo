@@ -5,22 +5,14 @@ using UnityEngine;
 
 namespace RTSDemo
 {
-    public enum MouseButton
-    {
-        LeftMouse,
-        RightMouse,
-        MiddleMouse,
-        None
-    }
-
-    public delegate void MouseInputEvent(int x, int y, MouseButton btn);
-
     public class GridManager : Singleton<GridManager>
     {
-        public event MouseInputEvent MouseHover;
-        public event MouseInputEvent MouseDown;
-        public event MouseInputEvent MouseUp;
-        public event MouseInputEvent MouseClick;
+        private short[,] map;
+
+        public void InitializeMap(Vector2 mapSize)
+        {
+            map = new short[(int)mapSize.x, (int)mapSize.y];
+        }
 
         // Use this for initialization
         void Start()

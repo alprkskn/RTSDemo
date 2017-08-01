@@ -29,12 +29,34 @@ namespace RTSDemo
 
         protected virtual void Start()
         {
+            // 2 is an arbitrary number.
+            // A single WaitForEndOfFrame
+            // might not be enough at times.
+            StartCoroutine(waitForUI(2));
+        }
 
+        private IEnumerator waitForUI(int frameCount)
+        {
+            for (int i = 0; i < frameCount; i++)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+            UIStart();
         }
 
         protected virtual void Update()
         {
 
+        }
+
+        /// <summary>
+        /// UI elements are not always ready when Start is called.
+        /// So I will call this after a full frame.
+        /// </summary>
+        protected virtual void UIStart()
+        {
+            
         }
 
         public virtual void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
