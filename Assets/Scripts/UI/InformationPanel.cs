@@ -1,14 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
 namespace RTSDemo
 {
+    public delegate void UnitProductionEventHandler(Type product, IInfoPanelElement entity);
+
     public class InformationPanel : MonoBehaviour
     {
+        public event UnitProductionEventHandler UnitProduced;
+
         [SerializeField] private Text _entityLabel;
         [SerializeField] private Image _entityImage;
         [SerializeField] private RectTransform _productionPanel;
@@ -44,6 +50,17 @@ namespace RTSDemo
                         go.GetComponent<Image>().sprite =
                             ResourcesManager.Instance.GetSprite(product.Name.Substring(0, product.Name.Length - 5));
                         var button = go.GetComponent<Button>();
+
+                        Type type = product;
+
+                        button.onClick.AddListener(() =>
+                        {
+                            if (UnitProduced != null)
+                            {
+                                UnitProduced(type, entity);
+                            }
+                            EventSystem.current.SetSelectedGameObject(null);
+                        });
 
                         _productionButtons.Add(button);
                     }

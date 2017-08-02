@@ -11,5 +11,10 @@ namespace RTSDemo
         {
             
         }
+
+        protected virtual void RallyPointChanged(object model, Vector2 value)
+        {
+            Debug.LogError("RallyPointChanged " + value.ToString());
+        }
     }
 }

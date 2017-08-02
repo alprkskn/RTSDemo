@@ -35,7 +35,7 @@ namespace PathFinding {
     /// To keep it simple, instead of a generic graph, this class will use the grid type I use
     /// within the project.
     /// </summary>
-    public class PathFinding : MonoBehaviour
+    public class PathFinding
     {
         public delegate bool PathComparer(short value);
 
@@ -48,35 +48,35 @@ namespace PathFinding {
             }
         }
 
-        private void Start()
-        {
-            //HashSet<Location> lol = new HashSet<Location>(new Location.Comparer());
+        //private void Start()
+        //{
+        //    //HashSet<Location> lol = new HashSet<Location>(new Location.Comparer());
 
-            //lol.Add(new Location() { CoordX = 1, CoordY = 0 });
-            //lol.Add(new Location() { CoordX = 1, CoordY = 0 });
-            //lol.Add(new Location() { CoordX = 1, CoordY = 0 , F = 2});
-            //lol.Add(new Location() { CoordX = 1, CoordY = 2 });
+        //    //lol.Add(new Location() { CoordX = 1, CoordY = 0 });
+        //    //lol.Add(new Location() { CoordX = 1, CoordY = 0 });
+        //    //lol.Add(new Location() { CoordX = 1, CoordY = 0 , F = 2});
+        //    //lol.Add(new Location() { CoordX = 1, CoordY = 2 });
 
-            //Debug.Log(lol.Contains(new Location { CoordX = 1, CoordY = 0 }));
+        //    //Debug.Log(lol.Contains(new Location { CoordX = 1, CoordY = 0 }));
 
-            short[,] map = new short[10,10]
-            {
-                { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0 },
-                { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0 },
-                { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0 },
-                { 0, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-            };
+        //    //short[,] map = new short[10,10]
+        //    //{
+        //    //    { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    //    { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0 },
+        //    //    { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0 },
+        //    //    { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0 },
+        //    //    { 0, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
+        //    //    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    //    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    //    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    //    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    //    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+        //    //};
 
-            var path = FindPath(map, 0, 0, 3, 3);
+        //    //var path = FindPath(map, 0, 0, 3, 3);
 
-            Debug.Log(path.Count);
-        }
+        //    //Debug.Log(path.Count);
+        //}
 
         public class Location
         {

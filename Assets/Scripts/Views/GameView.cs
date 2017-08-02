@@ -9,7 +9,9 @@ namespace RTSDemo
     public delegate void BoardClickEventHandler(GameView sender, int coordX, int coordY, PointerEventData.InputButton btn);
     public delegate void BoardHoverEventHandler(GameView sender, int coordX, int coordY);
 
-    public delegate void BuildingProductionHandler(GameView sender, Type buildingType);
+    public delegate void BuildingConstructionHandler(GameView sender, Type buildingType);
+
+    public delegate void UnitProductionHandler(GameView sender, ProductionBuildingModel building, Type productType);
 
     public class GameView : ViewBase
     {
@@ -17,7 +19,8 @@ namespace RTSDemo
 
         public event BoardClickEventHandler BoardClickRegistered;
         public event BoardHoverEventHandler BoardHoverRegistered;
-        public event BuildingProductionHandler BuildingProductionStart;
+        public event BuildingConstructionHandler BuildingConstructionStart;
+        public event UnitProductionHandler UnitProduced;
 
         #endregion
 
@@ -28,7 +31,6 @@ namespace RTSDemo
         [SerializeField] private RectTransform _gameBoardContent;
         [SerializeField] private InformationPanel _informationPanel;
         [SerializeField] private RectTransform _informationPanelContent;
-        [SerializeField] private GridManager _gridManager;
         #endregion
 
         #region PrivateFields
@@ -73,7 +75,7 @@ namespace RTSDemo
 
         protected virtual void UnitsAdd(object model, UnitModel unit)
         {
-            
+            GridManager.Instance.UpdateMap(unit.CoordX, unit.CoordY, 1, 1, GridLayers.Units);
         }
 
         protected virtual void AvailableBuildingTypesChanged(object model, List<Type> availableBuildings)
@@ -94,9 +96,9 @@ namespace RTSDemo
             _productionMenuScrollView.SetAvailableElements(typeDict);
             _productionMenuScrollView.ElementSelected += element =>
             {
-                if (BuildingProductionStart != null)
+                if (BuildingConstructionStart != null)
                 {
-                    BuildingProductionStart(this, element.RepresentedType);
+                    BuildingConstructionStart(this, element.RepresentedType);
                 }
             };
         }
@@ -109,17 +111,20 @@ namespace RTSDemo
             _productionMenuScrollView = _productionMenuContent.GetComponent<InfiniteScrollView>();
         }
 
-        protected override void Start()
-        {
-            base.Start();
-            _gridManager = GridManager.Instance;
-        }
-
         protected override void UIStart()
         {
             base.UIStart();
             _gameBoardCorners = new Vector3[4];
             _gameBoardContent.GetWorldCorners(_gameBoardCorners);
+            _informationPanel.UnitProduced += OnUnitProduced;
+        }
+
+        private void OnUnitProduced(Type product, IInfoPanelElement entity)
+        {
+            if (UnitProduced != null)
+            {
+                UnitProduced(this, (ProductionBuildingModel) entity, product);
+            }
         }
 
         protected override void Update()

@@ -10,6 +10,9 @@ namespace RTSDemo
         public static bool RectOverlap(int sourceX, int sourceY, int sourceW, int sourceH,
             int targetX, int targetY, int targetW, int targetH)
         {
+            // Special case for both with 0 W and H
+            if (sourceX == targetX && sourceY == targetY) return true;
+
             return !(sourceX + sourceW < targetX ||
                         targetX + targetW < sourceX || 
                         sourceY + sourceH < targetY ||

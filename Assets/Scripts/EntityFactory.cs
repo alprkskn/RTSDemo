@@ -47,10 +47,11 @@ namespace RTSDemo
         public static SoldierModel CreateSoldier(GameView parentView)
         {
             var model = new SoldierModel();
-            var view = ViewFactory.CreateViewForModel<UnitView>(model);
+            var view = ViewFactory.CreateViewForModel<SoldierView>(model);
             parentView.AddToMap(view);
 
             model.Name = "Soldier";
+            model.MovementRate = 0.5f;
 
             return model;
         }

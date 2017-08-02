@@ -22,10 +22,38 @@ namespace RTSDemo
             GameView gameView = (GameView) view;
 
             gameView.BoardClickRegistered += OnBoardClickRegistered;
-            gameView.BuildingProductionStart += OnBuildingProductionStart;
+            gameView.BuildingConstructionStart += OnBuildingConstructionStart;
+            gameView.UnitProduced += OnUnitProduced;
         }
 
-        private void OnBuildingProductionStart(GameView sender, Type buildingType)
+        private void OnUnitProduced(GameView sender, ProductionBuildingModel building, Type producttype)
+        {
+            var model = (GameModel) this._viewToModel[sender];
+
+            var soldier = EntityFactory.CreateSoldier(sender);
+
+            var initialPlace = GridManager.Instance.GetAvailableSlot(building.CoordX, building.CoordY, building.Width,
+                building.Height, (int) building.RallyPoint.x, (int) building.RallyPoint.y);
+
+            soldier.CoordX = (int) initialPlace.x;
+            soldier.CoordY = (int) initialPlace.y;
+
+            Debug.LogError(initialPlace);
+
+            var path = GridManager.Instance.FindPath(soldier.CoordX, soldier.CoordY, (int)building.RallyPoint.x, (int)building.RallyPoint.y);
+
+            if (path != null)
+            {
+                soldier.Path = path;
+            }
+            else
+            {
+                Debug.LogError("Could not find a path.");
+            }
+            model.AddUnit(soldier);
+        }
+
+        private void OnBuildingConstructionStart(GameView sender, Type buildingType)
         {
             // This means there is an unfinished placement going.
             // It will be terminated.
@@ -118,7 +146,27 @@ namespace RTSDemo
             {
                 if (_currentSelection != null)
                 {
-                    
+                    // Too tired to think something anything near engineering at this point.
+                    // Just getting things done.
+                    // We have only to entities that get right click commands.
+                    if (_currentSelection is SoldierModel)
+                    {
+                        SoldierModel soldier = (SoldierModel) _currentSelection;
+                        var path = GridManager.Instance.FindPath(soldier.CoordX, soldier.CoordY, coordX, coordY);
+
+                        if (path != null)
+                        {
+                            soldier.Path = path;
+                        }
+                        else
+                        {
+                            Debug.LogError("Could not find a path.");
+                        }
+                    }
+                    else if (_currentSelection is BarracksModel)
+                    {
+                        ((BarracksModel) _currentSelection).RallyPoint = new Vector2(coordX, coordY);
+                    }
                 }
             }
         }

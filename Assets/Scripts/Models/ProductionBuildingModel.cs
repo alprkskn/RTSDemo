@@ -8,6 +8,7 @@ namespace RTSDemo
     public class ProductionBuildingModel : BuildingModel
     {
         private List<Type> _productionList;
+        private Vector2 _rallyPoint;
 
         public List<Type> ProductionList
         {
@@ -16,6 +17,16 @@ namespace RTSDemo
             {
                 _productionList = value;
                 NotifyPropertyChange("ProductionList", value);
+            }
+        }
+
+        public Vector2 RallyPoint
+        {
+            get { return _rallyPoint; }
+            set
+            {
+                _rallyPoint = value;
+                NotifyPropertyChange("RallyPoint", value);
             }
         }
 
