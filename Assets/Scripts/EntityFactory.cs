@@ -17,10 +17,12 @@ namespace RTSDemo
             var view = ViewFactory.CreateViewForModel<BarracksView>(model);
             parentView.AddToMap(view);
 
+            model.Name = "Barracks";
             model.Placed = false;
             model.Width = (int)GameConstants.BarracksSize.x;
             model.Height = (int)GameConstants.BarracksSize.y;
             model.MapImage = ResourcesManager.Instance.GetSprite("BarracksMap");
+            model.UiImage = ResourcesManager.Instance.GetSprite("Barracks");
             model.ProductionList = new List<Type>() { typeof(SoldierModel) };
 
             return model;
@@ -32,10 +34,12 @@ namespace RTSDemo
             var view = ViewFactory.CreateViewForModel<PowerPlantView>(model);
             parentView.AddToMap(view);
 
+            model.Name = "PowerPlant";
             model.Placed = false;
             model.Width = (int)GameConstants.PowerPlantSize.x;
             model.Height = (int)GameConstants.PowerPlantSize.y;
             model.MapImage = ResourcesManager.Instance.GetSprite("PowerPlantMap");
+            model.UiImage = ResourcesManager.Instance.GetSprite("PowerPlant");
 
             return model;
         }
@@ -45,6 +49,8 @@ namespace RTSDemo
             var model = new SoldierModel();
             var view = ViewFactory.CreateViewForModel<UnitView>(model);
             parentView.AddToMap(view);
+
+            model.Name = "Soldier";
 
             return model;
         }

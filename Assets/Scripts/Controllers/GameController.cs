@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace RTSDemo
 {
@@ -64,47 +66,59 @@ namespace RTSDemo
         private void OnBoardClickRegistered(GameView sender, int coordX, int coordY, UnityEngine.EventSystems.PointerEventData.InputButton btn)
         {
             var model = (GameModel) this._viewToModel[sender];
-            // There is an undergoing placement.
-            // This will not select units.
-            if (_buildingPlacement != null)
-            {
-                var available = !GridManager.Instance.CheckOverlap(coordX, coordY, _buildingPlacement.Width, _buildingPlacement.Height,
-                    GridLayers.Buildings | GridLayers.Units);
 
-                if (available)
-                {
-                    model.AddBuilding(_buildingPlacement);
-                    _buildingPlacement.Placed = true;
-                    _buildingPlacement = null;
-                    sender.BoardHoverRegistered -= OnBoardHoverRegistered;
-                }
-            }
-            else
+            if (btn == PointerEventData.InputButton.Left)
             {
-                bool hit = false;
-                foreach (var selectable in model.Selectables)
+                // There is an undergoing placement.
+                // This will not select units.
+                if (_buildingPlacement != null)
                 {
-                    // Check given coords with Rectangles of selectables.
-                    if (selectable.CheckOverlap(coordX, coordY))
+                    var available = !GridManager.Instance.CheckOverlap(coordX, coordY, _buildingPlacement.Width,
+                        _buildingPlacement.Height,
+                        GridLayers.Buildings | GridLayers.Units);
+
+                    if (available)
                     {
-                        hit = true;
-                        if (_currentSelection != null)
-                        {
-                            _currentSelection.OnDeSelection();
-                        }
-
-                        selectable.OnSelection();
-                        _currentSelection = selectable;
-                        model.SelectedEntity = selectable;
-                        break;
+                        model.AddBuilding(_buildingPlacement);
+                        _buildingPlacement.Placed = true;
+                        _buildingPlacement = null;
+                        sender.BoardHoverRegistered -= OnBoardHoverRegistered;
                     }
                 }
-
-                if (!hit)
+                else
                 {
-                    _currentSelection.OnDeSelection();
-                    _currentSelection = null;
-                    model.SelectedEntity = null;
+                    bool hit = false;
+                    foreach (var selectable in model.Selectables)
+                    {
+                        // Check given coords with Rectangles of selectables.
+                        if (selectable.CheckOverlap(coordX, coordY))
+                        {
+                            hit = true;
+                            if (_currentSelection != null)
+                            {
+                                _currentSelection.OnDeSelection();
+                            }
+
+                            selectable.OnSelection();
+                            _currentSelection = selectable;
+                            model.SelectedEntity = selectable;
+                            break;
+                        }
+                    }
+
+                    if (_currentSelection != null && !hit)
+                    {
+                        _currentSelection.OnDeSelection();
+                        _currentSelection = null;
+                        model.SelectedEntity = null;
+                    }
+                }
+            }
+            else if (btn == PointerEventData.InputButton.Right)
+            {
+                if (_currentSelection != null)
+                {
+                    
                 }
             }
         }

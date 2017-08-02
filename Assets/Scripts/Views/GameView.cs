@@ -26,7 +26,7 @@ namespace RTSDemo
         [SerializeField] private RectTransform _productionMenuContent;
         [SerializeField] private RectTransform _gameBoard;
         [SerializeField] private RectTransform _gameBoardContent;
-        [SerializeField] private RectTransform _informationPanel;
+        [SerializeField] private InformationPanel _informationPanel;
         [SerializeField] private RectTransform _informationPanelContent;
         [SerializeField] private GridManager _gridManager;
         #endregion
@@ -68,7 +68,7 @@ namespace RTSDemo
 
         protected virtual void SelectedEntityChanged(object model, ISelectable selectable)
         {
-            
+            _informationPanel.SetEntity((selectable != null) ? selectable.GetInfoPanelElement() : null);
         }
 
         protected virtual void UnitsAdd(object model, UnitModel unit)

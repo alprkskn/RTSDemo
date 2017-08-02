@@ -27,5 +27,10 @@ namespace RTSDemo
         {
             return new List<Type>();
         }
+
+        public override IInfoPanelElement GetInfoPanelElement()
+        {
+            return this;
+        }
     }
 }

@@ -111,5 +111,10 @@ namespace RTSDemo
             return GridUtilities.RectOverlap(coordX, coordY, 0, 0,
                 _coordX, _coordY, _width - 1, _height - 1);
         }
+
+        public virtual IInfoPanelElement GetInfoPanelElement()
+        {
+            return null;
+        }
     }
 }
