@@ -120,7 +120,7 @@ public class InfiniteScrollView : MonoBehaviour
                 var element = Instantiate<GameObject>(ElementPrefab); // TODO: Instantiations will use an ObjectPooling Mechanism.
 
                 var entry = element.GetComponent<InfiniteScrollEntry>();
-                entry.TransformHandle.position = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor) * AppRoot.Instance.Canvas.scaleFactor;
+                entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor);
                 entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
                 entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
                 entry.TransformHandle.SetParent(Content, false);
@@ -150,7 +150,10 @@ public class InfiniteScrollView : MonoBehaviour
 
         foreach (var element in _entries)
         {
-            element.TransformHandle.Translate(0, yOffset, 0);
+            //element.TransformHandle.Translate(0, yOffset, 0);
+            var pos = element.TransformHandle.anchoredPosition; //Translate(0, yOffset, 0);
+            pos.y += yOffset;
+            element.TransformHandle.anchoredPosition = pos;
         }
 
         _topOffset += yOffset;
@@ -215,7 +218,7 @@ public class InfiniteScrollView : MonoBehaviour
                     //var cursor = (yOffset < 0) ? _entries.Count - 1 : elementCursor - i;
                     var entry = rowElements[_currentGridWidth * rowInProgress + i];
 
-                    entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor) * AppRoot.Instance.Canvas.scaleFactor;
+                    entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor);
                     entry.TransformHandle.SetParent(Content, false);
 
                     // TODO: Reset the entries visuals.
