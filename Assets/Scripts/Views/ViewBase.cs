@@ -8,6 +8,12 @@ namespace RTSDemo
 {
     public abstract class ViewBase : MonoBehaviour
     {
+        private bool _uiReady = false;
+
+        protected bool UIReady
+        {
+            get { return _uiReady; }
+        }
 
         public string BaseName
         {
@@ -47,6 +53,7 @@ namespace RTSDemo
                 yield return new WaitForEndOfFrame();
             }
 
+            _uiReady = true;
             UIStart();
         }
 

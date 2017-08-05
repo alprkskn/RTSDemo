@@ -130,7 +130,7 @@ namespace RTSDemo
         protected override void Update()
         {
             base.Update();
-            if (_trackMouseHover)
+            if (UIReady && _trackMouseHover)
             {
                 Vector2 mapPosition = (Vector2)Input.mousePosition - (Vector2) _gameBoardCorners[1];
                 mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
@@ -147,19 +147,24 @@ namespace RTSDemo
         {
             PointerEventData ptrData = (PointerEventData) e;
 
-            Vector2 mapPosition = ptrData.position - (Vector2) _gameBoardCorners[1];
-
-            // Canvas scales all elements to fit them into the current screen.
-            // So the actual world positions change.
-            // Hence, mapPosition is normalized before finding the coordinates.2
-            mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
-
-            int coordX = (int) mapPosition.x / GameConstants.CellSize;
-            int coordY = (int) -mapPosition.y / GameConstants.CellSize;
-
-            if (BoardClickRegistered != null)
+            // This event fires even when its after dragging
+            // It will not register a click when thats the case
+            if (!ptrData.dragging)
             {
-                BoardClickRegistered(this, coordX, coordY, ptrData.button);
+                Vector2 mapPosition = ptrData.position - (Vector2) _gameBoardCorners[1];
+
+                // Canvas scales all elements to fit them into the current screen.
+                // So the actual world positions change.
+                // Hence, mapPosition is normalized before finding the coordinates.2
+                mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
+
+                int coordX = (int) mapPosition.x / GameConstants.CellSize;
+                int coordY = (int) -mapPosition.y / GameConstants.CellSize;
+
+                if (BoardClickRegistered != null)
+                {
+                    BoardClickRegistered(this, coordX, coordY, ptrData.button);
+                }
             }
         }
 
