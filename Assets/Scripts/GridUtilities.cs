@@ -25,7 +25,7 @@ namespace RTSDemo
         {
             if (x < 0 || y < 0) return true;
 
-            if (x + width >= map.GetLength(0) || y + height >= map.GetLength(1)) return true;
+            if (x + width > map.GetLength(0) || y + height > map.GetLength(1)) return true;
 
             for (int i = 0; i < width; i++)
             {
