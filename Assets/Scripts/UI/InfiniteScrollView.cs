@@ -27,6 +27,7 @@ public class InfiniteScrollView : MonoBehaviour
 
     public int BufferRowCount; // How many rows will be kept above and below the bounds as a buffer.
 
+    private ObjectPool<InfiniteScrollEntry> _entryPool;
     private List<InfiniteScrollEntry> _entries;
     private List<Element> _availableContentList;
     private int _currentGridWidth = 0;
@@ -44,13 +45,6 @@ public class InfiniteScrollView : MonoBehaviour
         }
     }
 
-    // Use this for initialization
-    void Awake()
-    {
-        _availableContentList = new List<Element>();
-        _entries = new List<InfiniteScrollEntry>();
-        _topOffset = BufferRowCount * (ElementSize + Spacing.y);
-    }
 
     public void SetAvailableElements(Dictionary<Type, Sprite> elements)
     {
@@ -68,7 +62,16 @@ public class InfiniteScrollView : MonoBehaviour
         RearrangeElements();
     }
 
-    // Update is called once per frame
+    void Awake()
+    {
+        _availableContentList = new List<Element>();
+        _entries = new List<InfiniteScrollEntry>();
+        _topOffset = BufferRowCount * (ElementSize + Spacing.y);
+
+        // Using arbitrary sizes here.
+        _entryPool = new ObjectPool<InfiniteScrollEntry>(64, CreateEntry, 16);
+    }
+
     void Update()
     {
         if (AdjustGrid())
@@ -91,6 +94,12 @@ public class InfiniteScrollView : MonoBehaviour
         }
 
         return false;
+    }
+
+    InfiniteScrollEntry CreateEntry()
+    {
+        var entry = Instantiate<GameObject>(ElementPrefab);
+        return entry.GetComponent<InfiniteScrollEntry>();
     }
 
     void RearrangeElements()
@@ -117,9 +126,9 @@ public class InfiniteScrollView : MonoBehaviour
         {
             for (int i = 0; i < _currentGridWidth; i++)
             {
-                var element = Instantiate<GameObject>(ElementPrefab); // TODO: Instantiations will use an ObjectPooling Mechanism.
+                var entry = _entryPool.GetObject(); //Instantiate<GameObject>(ElementPrefab); // TODO: Instantiations will use an ObjectPooling Mechanism.
 
-                var entry = element.GetComponent<InfiniteScrollEntry>();
+                //var entry = element.GetComponent<InfiniteScrollEntry>();
                 entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor);
                 entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
                 entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
@@ -215,13 +224,22 @@ public class InfiniteScrollView : MonoBehaviour
                 // Set cursor to the end of the row to be removed.
                 for (int i = 0; i < _currentGridWidth; i++)
                 {
-                    //var cursor = (yOffset < 0) ? _entries.Count - 1 : elementCursor - i;
                     var entry = rowElements[_currentGridWidth * rowInProgress + i];
 
+                    // Release the current entry.
+                    _entryPool.ReleaseObject(entry);
+
+                    // Get a new entry from the pool.
+                    entry = _entryPool.GetObject();
+
+                    
+
+                    entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
+                    entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
                     entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor);
                     entry.TransformHandle.SetParent(Content, false);
 
-                    // TODO: Reset the entries visuals.
+                    entry.Element = _availableContentList[elementTypeCursor];
                     entry.Initialize();
                     entry.Selected += (e) =>
                     {
@@ -232,17 +250,13 @@ public class InfiniteScrollView : MonoBehaviour
                     };
 
 
-                    //element.TransformHandle.GetComponentInChildren<Text>().text = _availableContentList[elementTypeCursor];
                     elementTypeCursor = (elementTypeCursor + 1) % _availableContentList.Count;
-
-                    //_entries.RemoveAt(cursor);
                     _entries.Insert((yOffset < 0) ? (rowInProgress * _currentGridWidth) + i : _entries.Count, entry);
                 }
 
                 replacedRows--;
                 heightCursor -= (int)(ElementSize + Spacing.y);
                 rowInProgress++;
-                //_topOffset += ((yOffset < 0) ? 1 : -1) * (ElementSize + Spacing.y);
             }
         }
     }

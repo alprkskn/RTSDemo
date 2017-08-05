@@ -89,9 +89,13 @@ namespace RTSDemo
                 model = EntityFactory.CreatePowerPlant(sender);
             }
 
-            _buildingPlacement = model;
+            if (model != null)
+            {
+                _buildingPlacement = model;
+                model.CoordX = -100;
 
-            sender.BoardHoverRegistered += OnBoardHoverRegistered;
+                sender.BoardHoverRegistered += OnBoardHoverRegistered;
+            }
         }
 
         private void OnBoardHoverRegistered(GameView sender, int coordX, int coordY)
