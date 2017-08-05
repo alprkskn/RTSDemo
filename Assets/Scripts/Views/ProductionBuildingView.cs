@@ -5,19 +5,12 @@ using UnityEngine;
 
 namespace RTSDemo
 {
-    public class BarracksView : BuildingView
+    public class ProductionBuildingView : BuildingView
     {
         [SerializeField]
         private RectTransform _rallyPointPrefab;
 
         private RectTransform _rallyPointObject;
-        private RectTransform _rectTransform;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            _rectTransform = (RectTransform)GetComponent<RectTransform>();
-        }
 
         protected virtual void ProductionListChanged(object sender, List<Type> value)
         {
@@ -27,7 +20,7 @@ namespace RTSDemo
         protected virtual void RallyPointChanged(object model, Vector2? value)
         {
             Debug.LogError("RallyPointChanged " + value.ToString());
-            BarracksModel m = (BarracksModel)model;
+            ProductionBuildingModel m = (ProductionBuildingModel)model;
 
             if (m.Highlighted)
             {
@@ -39,7 +32,7 @@ namespace RTSDemo
         {
             base.HighlightedChanged(model, highlighted);
 
-            BarracksModel m = (BarracksModel)model;
+            ProductionBuildingModel m = (ProductionBuildingModel)model;
 
             if (m.RallyPoint.HasValue)
             {
@@ -55,7 +48,7 @@ namespace RTSDemo
         }
 
 
-        private void CreateRallyPointObject(BarracksModel model)
+        private void CreateRallyPointObject(ProductionBuildingModel model)
         {
             // Clean the previous one if it exists
             DestroyRallyPointObject();

@@ -88,6 +88,14 @@ namespace RTSDemo
             {
                 model = EntityFactory.CreatePowerPlant(sender);
             }
+            else if (buildingType == typeof(CommandCenterModel))
+            {
+                model = EntityFactory.CreateCommandCenter(sender);
+            }
+            else if (buildingType == typeof(AirFieldModel))
+            {
+                model = EntityFactory.CreateAirField(sender);
+            }
 
             if (model != null)
             {
@@ -181,9 +189,9 @@ namespace RTSDemo
                             Debug.LogError("Could not find a path.");
                         }
                     }
-                    else if (_currentSelection is BarracksModel)
+                    else if (_currentSelection is ProductionBuildingModel)
                     {
-                        ((BarracksModel) _currentSelection).RallyPoint = new Vector2(coordX, coordY);
+                        ((ProductionBuildingModel) _currentSelection).RallyPoint = new Vector2(coordX, coordY);
                     }
                 }
             }

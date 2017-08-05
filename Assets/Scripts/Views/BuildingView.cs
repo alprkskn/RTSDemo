@@ -11,7 +11,7 @@ namespace RTSDemo
         [SerializeField] private Image _mapImage;
 
         private RectTransform _mapImageRectTransform;
-        private RectTransform _rectTransform;
+        protected RectTransform _rectTransform;
 
         protected void PlacedChanged(object sender, bool placed)
         {

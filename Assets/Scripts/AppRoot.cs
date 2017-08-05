@@ -70,7 +70,11 @@ namespace RTSDemo
             game.MapSize = new Vector2(20, 20);
             game.Units = new List<UnitModel>();
             game.Buildings = new List<BuildingModel>();
-            game.AvailableBuildingTypes = new List<Type>() {typeof(BarracksModel), typeof(PowerPlantModel)};
+            game.AvailableBuildingTypes = new List<Type>()
+            {
+                typeof(BarracksModel), typeof(PowerPlantModel),
+                typeof(CommandCenterModel), typeof(AirFieldModel)
+            };
 
 
         }

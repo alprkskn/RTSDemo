@@ -28,6 +28,39 @@ namespace RTSDemo
             return model;
         }
 
+        public static AirFieldModel CreateAirField(GameView parentView)
+        {
+            var model = new AirFieldModel();
+            var view = ViewFactory.CreateViewForModel<AirFieldView>(model);
+            parentView.AddToMap(view);
+
+            model.Name = "AirField";
+            model.Placed = false;
+            model.Width = (int)GameConstants.AirFieldSize.x;
+            model.Height = (int)GameConstants.AirFieldSize.y;
+            model.MapImage = ResourcesManager.Instance.GetSprite("AirFieldMap");
+            model.UiImage = ResourcesManager.Instance.GetSprite("AirField");
+            model.ProductionList = new List<Type>() { typeof(SoldierModel) };
+
+            return model;
+        }
+
+        public static CommandCenterModel CreateCommandCenter(GameView parentView)
+        {
+            var model = new CommandCenterModel();
+            var view = ViewFactory.CreateViewForModel<CommandCenterView>(model);
+            parentView.AddToMap(view);
+
+            model.Name = "CommandCenter";
+            model.Placed = false;
+            model.Width = (int)GameConstants.CommandCenterSize.x;
+            model.Height = (int)GameConstants.CommandCenterSize.y;
+            model.MapImage = ResourcesManager.Instance.GetSprite("CommandCenterMap");
+            model.UiImage = ResourcesManager.Instance.GetSprite("CommandCenter");
+
+            return model;
+        }
+
         public static PowerPlantModel CreatePowerPlant(GameView parentView)
         {
             var model = new PowerPlantModel();
