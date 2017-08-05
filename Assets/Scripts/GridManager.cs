@@ -51,10 +51,10 @@ namespace RTSDemo
 
             for (int i = -1; i <= width; i++)
             {
+                var x = i + coordX;
                 for (int j = -1; j <= height; j++)
                 {
-                    var x = i + coordX;
-                    var y = i + coordY;
+                    var y = j + coordY;
 
                     if(x < 0 || x >= _map.GetLength(0)) continue;
                     if(y < 0 || y >= _map.GetLength(1)) continue;
