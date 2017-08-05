@@ -15,13 +15,18 @@ namespace RTSDemo
 
         private List<Vector2> _path;
         private float _rate;
+        private float _speed; // (CellSize / _rate)
         private float _elapsedTick;
         private RectTransform _rectTransform;
         private Image _image;
 
+        private Vector2 _currentCoords;
+
         protected virtual void MovementRateChanged(object sender, float value)
         {
             _rate = value;
+
+            _speed = GameConstants.CellSize / (_rate * 1000);
         }
 
         protected virtual void PathChanged(object sender, List<Vector2> value)
@@ -52,6 +57,7 @@ namespace RTSDemo
             var pos = _rectTransform.anchoredPosition;
             pos.x = x;
             _rectTransform.anchoredPosition = pos;
+            _currentCoords.x = coordX;
         }
 
         protected override void CoordYChanged(object model, int coordY)
@@ -61,6 +67,7 @@ namespace RTSDemo
             var pos = _rectTransform.anchoredPosition;
             pos.y = -y;
             _rectTransform.anchoredPosition = pos;
+            _currentCoords.y = coordY;
         }
 
         protected override void HighlightedChanged(object model, bool highlighted)
@@ -88,12 +95,25 @@ namespace RTSDemo
             base.Update();
             if (_path != null && _path.Count > 0)
             {
+                var wp = _path[0];
+
+                var direction = wp - _currentCoords;
+                direction.Normalize();
+
+                // Reverse y component of direction to
+                // normalize for the movement on UI.
+                direction.y *= -1;
+
+                var pos = _rectTransform.anchoredPosition;
+                pos += direction * (_speed * Time.deltaTime * 1000);
+                _rectTransform.anchoredPosition = pos;
+
+
                 _elapsedTick += Time.deltaTime;
 
                 if (_elapsedTick > _rate)
                 {
                     _elapsedTick -= _rate;
-                    var wp = _path[0];
                     if (ArrivedToWaypoint != null)
                     {
                         ArrivedToWaypoint(this, (int) wp.x, (int) wp.y);

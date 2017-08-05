@@ -8,7 +8,7 @@ namespace RTSDemo
 {
     public class UnitModel : EntityModel, IInfoPanelElement
     {
-        private float _movementRate; // time to advance one step in milliseconds.
+        private float _movementRate; // time to advance one step in seconds.
         private List<Vector2> _path;
 
         public float MovementRate

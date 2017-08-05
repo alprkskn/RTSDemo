@@ -195,7 +195,7 @@ namespace PathFinding {
 
             Location current = node;
 
-            while(current != null)
+            while(current.Parent != null)
             {
                 path.Add(new Vector2(current.CoordX, current.CoordY));
                 current = current.Parent;
