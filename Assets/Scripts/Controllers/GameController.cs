@@ -30,27 +30,41 @@ namespace RTSDemo
         {
             var model = (GameModel) this._viewToModel[sender];
 
-            var soldier = EntityFactory.CreateSoldier(sender);
 
-            var initialPlace = GridManager.Instance.GetAvailableSlot(building.CoordX, building.CoordY, building.Width,
-                building.Height, (int) building.RallyPoint.x, (int) building.RallyPoint.y);
+            var initialPlace = GridManager.Instance.GetAvailableSlotAroundRect(building.CoordX, building.CoordY, building.Width,
+                building.Height, 
+                (building.RallyPoint.HasValue) ? (int) building.RallyPoint.Value.x : building.CoordX, 
+                (building.RallyPoint.HasValue) ? (int) building.RallyPoint.Value.y : building.CoordY);
 
-            soldier.CoordX = (int) initialPlace.x;
-            soldier.CoordY = (int) initialPlace.y;
-
-            Debug.LogError(initialPlace);
-
-            var path = GridManager.Instance.FindPath(soldier.CoordX, soldier.CoordY, (int)building.RallyPoint.x, (int)building.RallyPoint.y);
-
-            if (path != null)
+            if (initialPlace.HasValue)
             {
-                soldier.Path = path;
+                var soldier = EntityFactory.CreateSoldier(sender);
+                soldier.CoordX = (int) initialPlace.Value.x;
+                soldier.CoordY = (int) initialPlace.Value.y;
+
+                Debug.LogError(initialPlace);
+
+                if (building.RallyPoint.HasValue)
+                {
+                    var path = GridManager.Instance.FindPath(soldier.CoordX, soldier.CoordY,
+                        (int) building.RallyPoint.Value.x,
+                        (int) building.RallyPoint.Value.y);
+
+                    if (path != null)
+                    {
+                        soldier.Path = path;
+                    }
+                    else
+                    {
+                        Debug.LogError("Could not find a path.");
+                    }
+                }
+                model.AddUnit(soldier);
             }
             else
             {
-                Debug.LogError("Could not find a path.");
+                Debug.LogError("There is no available spot for a soldier around the building.");
             }
-            model.AddUnit(soldier);
         }
 
         private void OnBuildingConstructionStart(GameView sender, Type buildingType)

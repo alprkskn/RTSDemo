@@ -24,12 +24,13 @@ namespace RTSDemo
 
         public bool CheckOverlap(int coordX, int coordY, int width, int height, GridLayers layerMask)
         {
-            return GridUtilities.Overlap(_map, coordX, coordY, width, height, (short) layerMask);
+            return GridUtilities.Overlap(_map, coordX, coordY, width, height, (short)layerMask);
         }
 
         public List<Vector2> FindPath(int coordX, int coordY, int targetX, int targetY, GridLayers layerMask = GridLayers.Buildings)
         {
-            return PathFinding.PathFinding.FindPath(_map, coordX, coordY, targetX, targetY, (short) layerMask);
+            // This case is not likely to succeed, but it will return an empty list anyways.
+            return PathFinding.PathFinding.FindPath(_map, coordX, coordY, targetX, targetY, (short)layerMask);
         }
 
         public void UpdateMap(int coordX, int coordY, int width, int height, GridLayers layer)
@@ -43,7 +44,59 @@ namespace RTSDemo
             }
         }
 
-        public Vector2 GetAvailableSlot(int coordX, int coordY, int width, int height, 
+        public Vector2? GetAvailableSlotAroundPoint(int coordX, int coordY, int targetX,
+            int targetY, int maxRadius = int.MaxValue,
+            GridLayers layerMask = GridLayers.Buildings | GridLayers.Units)
+        {
+            int radius = 0;
+
+            int mapWidth = _map.GetLength(0);
+            int mapHeight = _map.GetLength(1);
+
+            // First check the exact point for its availability.
+            if (coordX > 0 && coordX < mapWidth && coordY > 0 && coordY < mapHeight)
+            {
+                if ((_map[coordX, coordY] & (short)layerMask) == 0)
+                {
+                    return new Vector2(coordX, coordY);
+                }
+            }
+
+            radius = 1;
+            // If the exact point is not available we start a search with
+            // incremental radius to find an available spot until we hit
+            // the max search radius.
+            while (radius <= maxRadius)
+            {
+                var slot = GetAvailableSlotAroundRect(coordX, coordY, radius, radius, targetX, targetY, layerMask);
+
+                if (slot.HasValue)
+                {
+                    return slot;
+                }
+
+                // Increase search radius.
+                coordX--;
+                coordY--;
+                radius += 2;
+            }
+
+            return null;
+        }
+
+
+        /// <summary>
+        /// Finds the closest available slot around the rectangle to a given target point.
+        /// </summary>
+        /// <param name="coordX">Left coord of the rectangle.</param>
+        /// <param name="coordY">Top coord of the rectangle.</param>
+        /// <param name="width">Width of the rectangle.</param>
+        /// <param name="height">Height of the rectangle.</param>
+        /// <param name="targetX">X coord of the target point.</param>
+        /// <param name="targetY">Y coord of the target point.</param>
+        /// <param name="layersMask">Layers to include in the check for availability.</param>
+        /// <returns></returns>
+        public Vector2? GetAvailableSlotAroundRect(int coordX, int coordY, int width, int height,
             int targetX, int targetY, GridLayers layersMask = GridLayers.Buildings | GridLayers.Units)
         {
             int minX = -1, minY = -1;
@@ -56,10 +109,10 @@ namespace RTSDemo
                 {
                     var y = j + coordY;
 
-                    if(x < 0 || x >= _map.GetLength(0)) continue;
-                    if(y < 0 || y >= _map.GetLength(1)) continue;
+                    if (x < 0 || x >= _map.GetLength(0)) continue;
+                    if (y < 0 || y >= _map.GetLength(1)) continue;
 
-                    if ((_map[x, y] & (short) layersMask) == 0)
+                    if ((_map[x, y] & (short)layersMask) == 0)
                     {
                         var dist = Mathf.Abs(x - targetX) + Mathf.Abs(y - targetY);
                         if (dist < minDist)
@@ -71,6 +124,8 @@ namespace RTSDemo
                     }
                 }
             }
+
+            if (minX == -1 || minY == -1) return null;
 
             return new Vector2(minX, minY);
         }

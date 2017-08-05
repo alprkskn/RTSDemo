@@ -8,7 +8,7 @@ namespace RTSDemo
     public class ProductionBuildingModel : BuildingModel
     {
         private List<Type> _productionList;
-        private Vector2 _rallyPoint;
+        private Vector2? _rallyPoint;
 
         public List<Type> ProductionList
         {
@@ -20,7 +20,7 @@ namespace RTSDemo
             }
         }
 
-        public Vector2 RallyPoint
+        public Vector2? RallyPoint
         {
             get { return _rallyPoint; }
             set
