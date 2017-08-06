@@ -85,7 +85,8 @@ namespace RTSDemo
             game.AvailableBuildingTypes = new List<Type>()
             {
                 typeof(BarracksModel), typeof(PowerPlantModel),
-                typeof(CommandCenterModel), typeof(AirFieldModel)
+                typeof(CommandCenterModel), typeof(SupplyCenterModel),
+                typeof(HouseModel)
             };
 
 

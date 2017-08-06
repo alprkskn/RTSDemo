@@ -28,19 +28,18 @@ namespace RTSDemo
             return model;
         }
 
-        public static AirFieldModel CreateAirField(GameView parentView)
+        public static SupplyCenterModel CreateSupplyCenter(GameView parentView)
         {
-            var model = new AirFieldModel();
-            var view = ViewFactory.CreateViewForModel<AirFieldView>(model);
+            var model = new SupplyCenterModel();
+            var view = ViewFactory.CreateViewForModel<SupplyCenterView>(model);
             parentView.AddToMap(view);
 
-            model.Name = "AirField";
+            model.Name = "Supply Center";
             model.Placed = false;
-            model.Width = (int)GameConstants.AirFieldSize.x;
-            model.Height = (int)GameConstants.AirFieldSize.y;
-            model.MapImage = ResourcesManager.Instance.GetSprite("AirFieldMap");
-            model.UiImage = ResourcesManager.Instance.GetSprite("AirField");
-            model.ProductionList = new List<Type>() { typeof(SoldierModel) };
+            model.Width = (int)GameConstants.SupplyCenterSize.x;
+            model.Height = (int)GameConstants.SupplyCenterSize.y;
+            model.MapImage = ResourcesManager.Instance.GetSprite("SupplyCenterMap");
+            model.UiImage = ResourcesManager.Instance.GetSprite("SupplyCenter");
 
             return model;
         }
@@ -51,7 +50,7 @@ namespace RTSDemo
             var view = ViewFactory.CreateViewForModel<CommandCenterView>(model);
             parentView.AddToMap(view);
 
-            model.Name = "CommandCenter";
+            model.Name = "Command Center";
             model.Placed = false;
             model.Width = (int)GameConstants.CommandCenterSize.x;
             model.Height = (int)GameConstants.CommandCenterSize.y;
@@ -67,12 +66,28 @@ namespace RTSDemo
             var view = ViewFactory.CreateViewForModel<PowerPlantView>(model);
             parentView.AddToMap(view);
 
-            model.Name = "PowerPlant";
+            model.Name = "Power Plant";
             model.Placed = false;
             model.Width = (int)GameConstants.PowerPlantSize.x;
             model.Height = (int)GameConstants.PowerPlantSize.y;
             model.MapImage = ResourcesManager.Instance.GetSprite("PowerPlantMap");
             model.UiImage = ResourcesManager.Instance.GetSprite("PowerPlant");
+
+            return model;
+        }
+
+        public static HouseModel CreateHouse(GameView parentView)
+        {
+            var model = new HouseModel();
+            var view = ViewFactory.CreateViewForModel<HouseView>(model);
+            parentView.AddToMap(view);
+
+            model.Name = "House";
+            model.Placed = false;
+            model.Width = (int)GameConstants.HouseSize.x;
+            model.Height = (int)GameConstants.HouseSize.y;
+            model.MapImage = ResourcesManager.Instance.GetSprite("HouseMap");
+            model.UiImage = ResourcesManager.Instance.GetSprite("House");
 
             return model;
         }

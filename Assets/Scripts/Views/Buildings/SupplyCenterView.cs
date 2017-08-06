@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RTSDemo
 {
-    public class AirFieldController : BuildingController
+    public class SupplyCenterView : BuildingView
     {
     }
 }

@@ -92,9 +92,13 @@ namespace RTSDemo
             {
                 model = EntityFactory.CreateCommandCenter(sender);
             }
-            else if (buildingType == typeof(AirFieldModel))
+            else if (buildingType == typeof(SupplyCenterModel))
             {
-                model = EntityFactory.CreateAirField(sender);
+                model = EntityFactory.CreateSupplyCenter(sender);
+            }
+            else if (buildingType == typeof(HouseModel))
+            {
+                model = EntityFactory.CreateHouse(sender);
             }
 
             if (model != null)

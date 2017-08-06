@@ -21,9 +21,9 @@ GameObject:
   - component: {fileID: 224957815866781504}
   - component: {fileID: 222314003350254980}
   - component: {fileID: 114097662848066164}
-  - component: {fileID: 114282145955136900}
+  - component: {fileID: 114380578022412396}
   m_Layer: 5
-  m_Name: AirFieldView
+  m_Name: HouseView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114282145955136900
+--- !u!114 &114380578022412396
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -64,12 +64,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1342404270097546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc0ad9ae59b9f4f4c96ce6f0842ba9f6, type: 3}
+  m_Script: {fileID: 11500000, guid: ca5ac2c389258ff4fb440b2d2ebf9173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mapImage: {fileID: 114097662848066164}
-  _rallyPointPrefab: {fileID: 224311519865595898, guid: ec065d1a484a1b748a7dd2219ab3b776,
-    type: 2}
 --- !u!222 &222314003350254980
 CanvasRenderer:
   m_ObjectHideFlags: 1

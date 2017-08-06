@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RTSDemo
 {
-    public class AirFieldModel : ProductionBuildingModel
+    public class HouseView : BuildingView
     {
     }
 }
