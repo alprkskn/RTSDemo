@@ -197,7 +197,10 @@ namespace RTSDemo
                     }
                     else if (_currentSelection is ProductionBuildingModel)
                     {
-                        ((ProductionBuildingModel) _currentSelection).RallyPoint = new Vector2(coordX, coordY);
+                        if (!GridManager.Instance.CheckOverlap(coordX, coordY, 1, 1, GridLayers.Buildings))
+                        {
+                            ((ProductionBuildingModel) _currentSelection).RallyPoint = new Vector2(coordX, coordY);
+                        }
                     }
                 }
             }
