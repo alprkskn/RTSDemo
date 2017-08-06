@@ -36,8 +36,8 @@ namespace RTSDemo
                 _entityImage.sprite = entity.GetThumbnailImage();
 
                 var imageRectTransform = _entityImage.GetComponent<RectTransform>();
-                imageRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _entityImage.sprite.rect.width);
-                imageRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _entityImage.sprite.rect.height);
+                //imageRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _entityImage.sprite.rect.width);
+                //imageRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _entityImage.sprite.rect.height);
 
                 _productionPanel.gameObject.SetActive(entity.HasProduction());
 
@@ -49,15 +49,15 @@ namespace RTSDemo
                         var go = Instantiate(_productEntryPrefab);
                         var rt = go.GetComponent<RectTransform>();
                         rt.SetParent(_productionPanel, false);
-
+                        var imageGO = go.transform.Find("Image");
                         // Getting name by removing "Model" from the typename.
                         // Again, no error check.
                         var sprite = ResourcesManager.Instance.GetSprite(product.Name.Substring(0, product.Name.Length - 5));
-                        go.GetComponent<Image>().sprite = sprite;
+                        imageGO.GetComponent<Image>().sprite = sprite;
                         var button = go.GetComponent<Button>();
 
-                        rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sprite.rect.width);
-                        rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sprite.rect.height);
+                        //rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sprite.rect.width);
+                        //rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sprite.rect.height);
 
                         Type type = product;
 

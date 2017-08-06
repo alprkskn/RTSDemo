@@ -69,12 +69,12 @@ namespace RTSDemo
             // View should be portrait
             if (Screen.height > Screen.width * 1.5f)
             {
-                _canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1080, 1920);
+                _canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(540, 960);
                 _gameView = ViewFactory.CreateViewForModel<GamePortraitView>(game);
             }
             else
             {
-                _canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1920, 1080);
+                _canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(680, 540);
                 _gameView = ViewFactory.CreateViewForModel<GameView>(game);
             }
             _gameView.transform.SetParent(_canvasTransform, false);

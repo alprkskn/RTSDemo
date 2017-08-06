@@ -29,7 +29,7 @@ public class InfiniteScrollView : MonoBehaviour
         }
     }
 
-    public const float ElementSize = 128f;
+    public const float ElementSize = 64;
     public RectTransform Content;
     public GameObject ElementPrefab;
     public Vector2 Spacing;

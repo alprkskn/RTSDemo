@@ -38,6 +38,9 @@ namespace RTSDemo
         // BottomLeft - TopLeft - TopRight - BottomRight
         private Vector3[] _gameBoardCorners;
 
+        private RectTransform _gameBoardUnitsLayer;
+        private RectTransform _gameBoardBackgroundLayer;
+
         protected InfiniteScrollView _productionMenuScrollView;
         private bool _trackMouseHover = false;
         #endregion
@@ -108,6 +111,8 @@ namespace RTSDemo
         protected override void Awake()
         {
             base.Awake();
+            _gameBoardUnitsLayer = _gameBoardContent.Find("UnitsLayer").GetComponent<RectTransform>();
+            _gameBoardBackgroundLayer = _gameBoardContent.Find("BackgroundLayer").GetComponent<RectTransform>();
             _productionMenuScrollView = _productionMenuContent.GetComponent<InfiniteScrollView>();
             _productionMenuScrollView.Landscape = true;
         }
@@ -196,7 +201,7 @@ namespace RTSDemo
 
         public void AddToMap(ViewBase child)
         {
-            child.GetComponent<Transform>().SetParent(_gameBoardContent, false);
+            child.GetComponent<Transform>().SetParent(_gameBoardUnitsLayer, false);
         }
 
     }
