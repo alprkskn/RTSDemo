@@ -17,23 +17,32 @@ public class InfiniteScrollView : MonoBehaviour
         public int ContentType;
     }
 
-    public const float ElementSize = 64f;
+    private bool _landscape;
 
+    public bool Landscape
+    {
+        get { return _landscape; }
+        set
+        {
+            _landscape = value;
+            RearrangeElements();
+        }
+    }
+
+    public const float ElementSize = 128f;
     public RectTransform Content;
-
     public GameObject ElementPrefab;
-
     public Vector2 Spacing;
-
-    public int BufferRowCount; // How many rows will be kept above and below the bounds as a buffer.
+    public int BufferLineCount; // How many rows will be kept above and below the bounds as a buffer.
 
     private ObjectPool<InfiniteScrollEntry> _entryPool;
     private List<InfiniteScrollEntry> _entries;
     private List<Element> _availableContentList;
     private int _currentGridWidth = 0;
-    private int _currentRowCount = 0;
-
+    private int _currentGridHeight = 0;
+    private int _currentLineCount = 0;
     private float _topOffset = 0;
+    private bool _initialized = false;
 
     public void OnDrag(BaseEventData e)
     {
@@ -41,7 +50,14 @@ public class InfiniteScrollView : MonoBehaviour
 
         if (ptrEvent != null)
         {
-            OffsetElements(ptrEvent.delta.y);
+            if (_landscape)
+            {
+                OffsetElements(ptrEvent.delta.y);
+            }
+            else
+            {
+                OffsetElements(ptrEvent.delta.x);
+            }
         }
     }
 
@@ -64,12 +80,18 @@ public class InfiniteScrollView : MonoBehaviour
 
     void Awake()
     {
+        if(!_initialized)
+            Initialize();
+    }
+
+    void Initialize()
+    {
         _availableContentList = new List<Element>();
         _entries = new List<InfiniteScrollEntry>();
-        _topOffset = BufferRowCount * (ElementSize + Spacing.y);
 
         // Using arbitrary sizes here.
         _entryPool = new ObjectPool<InfiniteScrollEntry>(64, CreateEntry, 16);
+        _initialized = true;
     }
 
     void Update()
@@ -83,12 +105,15 @@ public class InfiniteScrollView : MonoBehaviour
     bool AdjustGrid()
     {
         float currentWidth = Content.rect.width;
+        float currentHeight = Content.rect.height;
 
         int gridWidth = (int)((currentWidth) / (ElementSize + Spacing.x));
+        int gridHeight = (int)((currentHeight) / (ElementSize + Spacing.y));
 
-        if (gridWidth != _currentGridWidth)
+        if (gridWidth != _currentGridWidth || gridHeight != _currentGridHeight)
         {
             _currentGridWidth = gridWidth;
+            _currentGridHeight = gridHeight;
 
             return true;
         }
@@ -104,6 +129,8 @@ public class InfiniteScrollView : MonoBehaviour
 
     void RearrangeElements()
     {
+        if(!_initialized)
+            Initialize();
 
         if (_entries.Count > 0)
         {
@@ -115,116 +142,245 @@ public class InfiniteScrollView : MonoBehaviour
             _entries.Clear();
         }
 
-        int heightCursor = (int)_topOffset;
+        if (_landscape)
+        {
+            _topOffset = BufferLineCount * (ElementSize + Spacing.y);
+        }
+        else
+        {
+            _topOffset = - BufferLineCount * (ElementSize + Spacing.x);
+        }
+
+        int lineCursor = (int)_topOffset;
         int height = (int)Content.rect.height;
         int width = (int)Content.rect.width;
 
-        int alignmentOffset = (int)((width - (_currentGridWidth * (ElementSize + Spacing.x))) / 2f); // To align element objects horizontally to middle of the panel.
+        int alignmentOffset = 0;
+
+        if (_landscape)
+        {
+            // To align element objects horizontally to middle of the panel.
+            alignmentOffset = (int) ((width - (_currentGridWidth * (ElementSize + Spacing.x))) / 2f);
+        }
+        else
+        {
+            alignmentOffset = (int) ((height - (_currentGridHeight * (ElementSize + Spacing.y))) / 2f);
+        }
+
 
         int elementTypeCursor = 0;
-        while (heightCursor > -height - BufferRowCount * (ElementSize + Spacing.y))
+
+        if (_landscape)
         {
-            for (int i = 0; i < _currentGridWidth; i++)
+            while (lineCursor > -height - BufferLineCount * (ElementSize + Spacing.y))
             {
-                var entry = _entryPool.GetObject(); //Instantiate<GameObject>(ElementPrefab); // TODO: Instantiations will use an ObjectPooling Mechanism.
-
-                //var entry = element.GetComponent<InfiniteScrollEntry>();
-                entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor);
-                entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
-                entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
-                entry.TransformHandle.SetParent(Content, false);
-                entry.Element = _availableContentList[elementTypeCursor];
-                entry.Initialize();
-                entry.Selected += (e) =>
+                for (int i = 0; i < _currentGridWidth; i++)
                 {
-                    if (ElementSelected != null)
+                    var entry = _entryPool.GetObject();
+                    entry.TransformHandle.anchoredPosition =
+                        new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), lineCursor);
+                    entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
+                    entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
+                    entry.TransformHandle.SetParent(Content, false);
+                    entry.Element = _availableContentList[elementTypeCursor];
+                    entry.Initialize();
+                    entry.Selected += (e) =>
                     {
-                        ElementSelected(e.Element);
-                    }
-                };
+                        if (ElementSelected != null)
+                        {
+                            ElementSelected(e.Element);
+                        }
+                    };
 
-                _entries.Add(entry);
+                    _entries.Add(entry);
 
-                elementTypeCursor = (elementTypeCursor + 1) % _availableContentList.Count;
+                    elementTypeCursor = (elementTypeCursor + 1) % _availableContentList.Count;
+                }
+                lineCursor -= (int) (ElementSize + Spacing.y);
             }
-            heightCursor -= (int)(ElementSize + Spacing.y);
         }
-        _currentRowCount = (int)((Mathf.Floor((height / (ElementSize + Spacing.y))) + 2 * BufferRowCount));
+        else
+        {
+            while (lineCursor < width + BufferLineCount * (ElementSize + Spacing.x))
+            {
+                for (int i = 0; i < _currentGridHeight; i++)
+                {
+                    var entry = _entryPool.GetObject();
+                    entry.TransformHandle.anchoredPosition =
+                        new Vector2(lineCursor, -alignmentOffset - i * (ElementSize + Spacing.y));
+                    entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
+                    entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
+                    entry.TransformHandle.SetParent(Content, false);
+                    entry.Element = _availableContentList[elementTypeCursor];
+                    entry.Initialize();
+                    entry.Selected += (e) =>
+                    {
+                        if (ElementSelected != null)
+                        {
+                            ElementSelected(e.Element);
+                        }
+                    };
+
+                    _entries.Add(entry);
+
+                    elementTypeCursor = (elementTypeCursor + 1) % _availableContentList.Count;
+                }
+                lineCursor += (int) (ElementSize + Spacing.x);
+            }
+            
+        }
+
+        if (_landscape)
+        {
+            _currentLineCount = (int) ((Mathf.Floor((height / (ElementSize + Spacing.y))) + 2 * BufferLineCount));
+        }
+        else
+        {
+            _currentLineCount = (int) ((Mathf.Floor((width / (ElementSize + Spacing.x))) + 2 * BufferLineCount));
+        }
     }
 
-    void OffsetElements(float yOffset)
+    void OffsetElements(float offset)
     {
         var rect = Content.rect;
-        yOffset %= rect.height;
+
+        offset %= (_landscape) ? rect.height : rect.width;
 
         foreach (var element in _entries)
         {
             //element.TransformHandle.Translate(0, yOffset, 0);
             var pos = element.TransformHandle.anchoredPosition; //Translate(0, yOffset, 0);
-            pos.y += yOffset;
+
+            if (_landscape)
+            {
+                pos.y += offset;
+            }
+            else
+            {
+                pos.x += offset;
+            }
+
             element.TransformHandle.anchoredPosition = pos;
         }
 
-        _topOffset += yOffset;
-        float _bottomOffset = _topOffset - _currentRowCount * (ElementSize + Spacing.y);
+        _topOffset += offset;
+
+        float _bottomOffset = (_landscape) ? _topOffset - _currentLineCount * (ElementSize + Spacing.y) :
+            _topOffset + _currentLineCount * (ElementSize + Spacing.x);
 
 
         int replacedRows = 0;
 
-        if (yOffset > 0 && _topOffset >= BufferRowCount * (ElementSize + Spacing.y))
+
+        if (_landscape)
         {
-            while (_topOffset > BufferRowCount * (ElementSize + Spacing.y))
+            if (offset > 0 && _topOffset >= BufferLineCount * (ElementSize + Spacing.y))
             {
-                _topOffset -= (ElementSize + Spacing.y);
-                _bottomOffset -= (ElementSize + Spacing.y);
-                replacedRows++;
+                while (_topOffset > BufferLineCount * (ElementSize + Spacing.y))
+                {
+                    _topOffset -= (ElementSize + Spacing.y);
+                    _bottomOffset -= (ElementSize + Spacing.y);
+                    replacedRows++;
+                }
+            }
+            else if (offset < 0 && _bottomOffset <= -rect.height - BufferLineCount * (ElementSize + Spacing.y))
+            {
+                while (_bottomOffset < -rect.height - BufferLineCount * (ElementSize + Spacing.y))
+                {
+                    _topOffset += (ElementSize + Spacing.y);
+                    _bottomOffset += (ElementSize + Spacing.y);
+                    replacedRows++;
+                }
             }
         }
-        else if (yOffset < 0 && _bottomOffset <= -rect.height - BufferRowCount * (ElementSize + Spacing.y))
+        else
         {
-            while (_bottomOffset < -rect.height - BufferRowCount * (ElementSize + Spacing.y))
+            if (offset > 0 && _bottomOffset >= rect.width + BufferLineCount * (ElementSize + Spacing.x))
             {
-                _topOffset += (ElementSize + Spacing.y);
-                _bottomOffset += (ElementSize + Spacing.y);
-                replacedRows++;
+                while (_bottomOffset > rect.width + BufferLineCount * (ElementSize + Spacing.x))
+                {
+                    _topOffset -= (ElementSize + Spacing.x);
+                    _bottomOffset -= (ElementSize + Spacing.x);
+                    replacedRows++;
+                }
             }
+            else if (offset < 0 && _topOffset <= -BufferLineCount * (ElementSize + Spacing.x))
+            {
+                while (_topOffset < -BufferLineCount * (ElementSize + Spacing.x))
+                {
+                    _topOffset += (ElementSize + Spacing.x);
+                    _bottomOffset += (ElementSize + Spacing.x);
+                    replacedRows++;
+                }
+            }
+            
         }
 
         if (replacedRows > 0)
         {
-            int alignmentOffset = (int)((rect.width - (_currentGridWidth * (ElementSize + Spacing.x))) / 2f);
+            int alignmentOffset = 0;
+            int cursor = 0;
 
-            int heightCursor = (int)((yOffset > 0) ? _bottomOffset + (replacedRows - 1) * (ElementSize + Spacing.y) : _topOffset);
+            if (_landscape)
+            {
+                alignmentOffset = (int) ((rect.width - (_currentGridWidth * (ElementSize + Spacing.x))) / 2f);
+                cursor = (int) ((offset > 0) ? _bottomOffset + (replacedRows - 1) * (ElementSize + Spacing.y) : _topOffset);
+            }
+            else
+            {
+                alignmentOffset = (int) ((rect.height - (_currentGridHeight * (ElementSize + Spacing.y))) / 2f);
+                cursor = (int) ((offset > 0) ? _topOffset : _bottomOffset - (replacedRows - 1) * (ElementSize + Spacing.x));
+            }
 
             int elementCursor = 0;
             int elementTypeCursor = 0;
 
-            if (yOffset < 0)
+            if (offset < 0)
             {
-                elementCursor = _entries.Count - _currentGridWidth * replacedRows;
+                if (_landscape)
+                {
+                    elementCursor = _entries.Count - _currentGridWidth * replacedRows;
 
-                // if yOffset is negative, meaning its a scroll down
-                // new element's cursor is a bit tricky to find due
-                // to the dynamic nature of the grid width.
-                // Otherwise we keep using the cursor as where it was.
-                elementTypeCursor = _entries[0].Element.ContentType - _currentGridWidth * replacedRows;
-                while (elementTypeCursor < 0) elementTypeCursor += _availableContentList.Count;
+                    // if yOffset is negative, meaning its a scroll down
+                    // new element's cursor is a bit tricky to find due
+                    // to the dynamic nature of the grid width.
+                    // Otherwise we keep using the cursor as where it was.
+                    elementTypeCursor = _entries[0].Element.ContentType - _currentGridWidth * replacedRows;
+                    while (elementTypeCursor < 0) elementTypeCursor += _availableContentList.Count;
+                }
+                else
+                {
+                    elementTypeCursor = (_entries[_entries.Count - 1].Element.ContentType + 1) %
+                                        _availableContentList.Count;
+                }
             }
             else
             {
-                elementTypeCursor = (_entries[_entries.Count - 1].Element.ContentType + 1) % _availableContentList.Count;
+                if (_landscape)
+                {
+                    elementTypeCursor = (_entries[_entries.Count - 1].Element.ContentType + 1) %
+                                        _availableContentList.Count;
+                }
+                else
+                {
+                    elementCursor = _entries.Count - _currentGridHeight * replacedRows;
+                    elementTypeCursor = _entries[0].Element.ContentType - _currentGridHeight * replacedRows;
+                    while (elementTypeCursor < 0) elementTypeCursor += _availableContentList.Count;
+                }
             }
 
-            var rowElements = _entries.GetRange(elementCursor, _currentGridWidth * replacedRows);
-            _entries.RemoveRange(elementCursor, _currentGridWidth * replacedRows);
+            int gridCount = (_landscape) ? _currentGridWidth : _currentGridHeight;
+            var lineElements = _entries.GetRange(elementCursor, gridCount * replacedRows);
+            _entries.RemoveRange(elementCursor, gridCount * replacedRows);
+
 
             int rowInProgress = 0;
             while (replacedRows > 0)
             {
                 // Set cursor to the end of the row to be removed.
-                for (int i = 0; i < _currentGridWidth; i++)
+                for (int i = 0; i < gridCount; i++)
                 {
-                    var entry = rowElements[_currentGridWidth * rowInProgress + i];
+                    var entry = lineElements[gridCount * rowInProgress + i];
 
                     // Release the current entry.
                     _entryPool.ReleaseObject(entry);
@@ -232,11 +388,11 @@ public class InfiniteScrollView : MonoBehaviour
                     // Get a new entry from the pool.
                     entry = _entryPool.GetObject();
 
-                    
-
                     entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
                     entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
-                    entry.TransformHandle.anchoredPosition = new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), heightCursor);
+                    entry.TransformHandle.anchoredPosition = (_landscape) ? 
+                        new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), cursor) :
+                        new Vector2(cursor, -alignmentOffset - i * (ElementSize + Spacing.y));
                     entry.TransformHandle.SetParent(Content, false);
 
                     entry.Element = _availableContentList[elementTypeCursor];
@@ -251,11 +407,27 @@ public class InfiniteScrollView : MonoBehaviour
 
 
                     elementTypeCursor = (elementTypeCursor + 1) % _availableContentList.Count;
-                    _entries.Insert((yOffset < 0) ? (rowInProgress * _currentGridWidth) + i : _entries.Count, entry);
+                    if (_landscape)
+                    {
+                        _entries.Insert((offset < 0) ? (rowInProgress * gridCount) + i : _entries.Count, entry);
+                    }
+                    else
+                    {
+                        _entries.Insert((offset < 0) ? _entries.Count : (rowInProgress * gridCount) + i, entry);
+                    }
                 }
 
                 replacedRows--;
-                heightCursor -= (int)(ElementSize + Spacing.y);
+
+                if (_landscape)
+                {
+                    cursor -= (int) (ElementSize + Spacing.y);
+                }
+                else
+                {
+                    cursor += (int) (ElementSize + Spacing.x);
+                }
+
                 rowInProgress++;
             }
         }

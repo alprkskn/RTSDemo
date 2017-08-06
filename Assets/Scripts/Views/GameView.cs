@@ -38,7 +38,7 @@ namespace RTSDemo
         // BottomLeft - TopLeft - TopRight - BottomRight
         private Vector3[] _gameBoardCorners;
 
-        private InfiniteScrollView _productionMenuScrollView;
+        protected InfiniteScrollView _productionMenuScrollView;
         private bool _trackMouseHover = false;
         #endregion
 
@@ -109,6 +109,7 @@ namespace RTSDemo
         {
             base.Awake();
             _productionMenuScrollView = _productionMenuContent.GetComponent<InfiniteScrollView>();
+            _productionMenuScrollView.Landscape = true;
         }
 
         protected override void UIStart()
@@ -130,10 +131,16 @@ namespace RTSDemo
         protected override void Update()
         {
             base.Update();
+
+            var canvasScale = AppRoot.Instance.CanvasTransform.localScale;
+            canvasScale = new Vector3(1/canvasScale.x, 1/canvasScale.y, 1/canvasScale.z);
+
+            _gameBoardContent.localScale = canvasScale;
+
             if (UIReady && _trackMouseHover)
             {
                 Vector2 mapPosition = (Vector2)Input.mousePosition - (Vector2) _gameBoardCorners[1];
-                mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
+                //mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
                 int coordX = (int)mapPosition.x / GameConstants.CellSize;
                 int coordY = (int)-mapPosition.y / GameConstants.CellSize;
                 if (BoardHoverRegistered != null)
@@ -156,7 +163,7 @@ namespace RTSDemo
                 // Canvas scales all elements to fit them into the current screen.
                 // So the actual world positions change.
                 // Hence, mapPosition is normalized before finding the coordinates.2
-                mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
+                //mapPosition /= AppRoot.Instance.Canvas.scaleFactor;
 
                 int coordX = (int) mapPosition.x / GameConstants.CellSize;
                 int coordY = (int) -mapPosition.y / GameConstants.CellSize;

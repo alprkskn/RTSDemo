@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RTSDemo
 {
@@ -64,10 +65,21 @@ namespace RTSDemo
             // Exclusive to this class. I'm creating Game Model and View manually.
             // Since these will be created only once. There is no need for other means.
             GameModel game = new GameModel();
-            _gameView = ViewFactory.CreateViewForModel<GameView>(game);
+
+            // View should be portrait
+            if (Screen.height > Screen.width * 1.5f)
+            {
+                _canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1080, 1920);
+                _gameView = ViewFactory.CreateViewForModel<GamePortraitView>(game);
+            }
+            else
+            {
+                _canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1920, 1080);
+                _gameView = ViewFactory.CreateViewForModel<GameView>(game);
+            }
             _gameView.transform.SetParent(_canvasTransform, false);
 
-            game.MapSize = new Vector2(20, 20);
+            game.MapSize = new Vector2(40, 40);
             game.Units = new List<UnitModel>();
             game.Buildings = new List<BuildingModel>();
             game.AvailableBuildingTypes = new List<Type>()

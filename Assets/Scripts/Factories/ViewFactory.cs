@@ -24,7 +24,9 @@ namespace RTSDemo
 
             var prefab = ResourcesManager.Instance.GetView(baseName);
             var viewInstance = Object.Instantiate(prefab).GetComponent<T>();
-            var controller = AppRoot.Instance.GetController(baseName);
+
+            // Use model's name to find the appropriate controller.
+            var controller = AppRoot.Instance.GetController(model.BaseName);
 
             controller.InitModelView(model, viewInstance);
 
