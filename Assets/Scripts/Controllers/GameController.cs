@@ -73,7 +73,9 @@ namespace RTSDemo
             // It will be terminated.
             if (_buildingPlacement != null)
             {
-                BuildingController.Instance.DestroyModel(_buildingPlacement);
+                var controller = AppRoot.Instance.GetController(_buildingPlacement.BaseName);
+                controller.DestroyModel(_buildingPlacement);
+                //BuildingController.Instance.DestroyModel(_buildingPlacement);
                 _buildingPlacement = null;
             }
 
