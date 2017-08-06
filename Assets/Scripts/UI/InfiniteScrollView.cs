@@ -105,6 +105,11 @@ public class InfiniteScrollView : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Decides the width and height of the grid
+    /// in number of entries.
+    /// </summary>
+    /// <returns>Returns true if grid entry count is changed, false otherwise.</returns>
     bool AdjustGrid()
     {
         float currentWidth = Content.rect.width;
@@ -136,6 +141,10 @@ public class InfiniteScrollView : MonoBehaviour
         _tooltipText = text;
     }
 
+    /// <summary>
+    /// Creates grid entries.
+    /// Destroys any previous entry.
+    /// </summary>
     void RearrangeElements()
     {
         if(!_initialized)
@@ -254,6 +263,11 @@ public class InfiniteScrollView : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Offsets the current elements by given offset.
+    /// </summary>
+    /// <param name="offset"></param>
     void OffsetElements(float offset)
     {
         var rect = Content.rect;
