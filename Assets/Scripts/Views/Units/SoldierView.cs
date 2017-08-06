@@ -19,6 +19,10 @@ namespace RTSDemo
         private float _elapsedTick;
         private RectTransform _rectTransform;
         private Image _image;
+        private Image _icon;
+
+        [SerializeField] private Sprite _deselectedSprite;
+        [SerializeField] private Sprite _selectedSprite;
 
         private Vector2 _currentCoords;
 
@@ -75,11 +79,13 @@ namespace RTSDemo
             base.HighlightedChanged(model, highlighted);
             if (highlighted)
             {
-                _image.color = Color.yellow;
+                _icon.color = Color.yellow;
+                _image.sprite = _selectedSprite;
             }
             else
             {
-                _image.color = Color.white;
+                _icon.color = Color.white;
+                _image.sprite = _deselectedSprite;
             }
         }
 
@@ -88,6 +94,7 @@ namespace RTSDemo
             base.Awake();
             _rectTransform = GetComponent<RectTransform>();
             _image = GetComponent<Image>();
+            _icon = _rectTransform.Find("Icon").GetComponent<Image>();
         }
 
         protected override void Update()
