@@ -1194,6 +1194,12 @@ MonoBehaviour:
   _gameBoardContent: {fileID: 224201033197876810}
   _informationPanel: {fileID: 114473195724273012}
   _informationPanelContent: {fileID: 224743440329949694}
+  _backgroundMisc:
+  - {fileID: 21300000, guid: ea85e3ad75316ea4eb410fef08f6a92d, type: 3}
+  - {fileID: 21300000, guid: 9a0cc1fcf872b3d4aba2eab364026d35, type: 3}
+  - {fileID: 21300000, guid: 8e8822182854f0b4c85a8b49a9780b98, type: 3}
+  - {fileID: 21300000, guid: 4d5c556f132047945b002cb2c77e9551, type: 3}
+  - {fileID: 21300000, guid: f58b503d25af2cd4c9a744f6860aa6cb, type: 3}
 --- !u!222 &222021869294394570
 CanvasRenderer:
   m_ObjectHideFlags: 1

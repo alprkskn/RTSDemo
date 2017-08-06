@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace RTSDemo
 {
@@ -31,6 +33,7 @@ namespace RTSDemo
         [SerializeField] private RectTransform _gameBoardContent;
         [SerializeField] private InformationPanel _informationPanel;
         [SerializeField] private RectTransform _informationPanelContent;
+        [SerializeField] private Sprite[] _backgroundMisc;
         #endregion
 
         #region PrivateFields
@@ -51,6 +54,9 @@ namespace RTSDemo
         {
             _gameBoardContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,  mapSize.x * GameConstants.CellSize);
             _gameBoardContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,  mapSize.y * GameConstants.CellSize);
+
+            // Decorate the background with a few misc sprites.
+            DecorateMap(mapSize);
 
             // For now this will refresh the grid without really cleanin the rest.
             GridManager.Instance.InitializeMap(mapSize);
@@ -204,6 +210,38 @@ namespace RTSDemo
             child.GetComponent<Transform>().SetParent(_gameBoardUnitsLayer, false);
         }
 
+        private void DecorateMap(Vector2 mapSize)
+        {
+            if (_backgroundMisc.Length > 0)
+            {
+                // Get somewhere between 10% and 20% of the tiles to put decoration on.
+                var decorationCount = (int) (mapSize.x * mapSize.y * Random.Range(0.1f, 0.2f));
+
+                for (int i = 0; i < decorationCount; i++)
+                {
+                    var sprite = _backgroundMisc[Random.Range(0, _backgroundMisc.Length)];
+                    var go = new GameObject(sprite.name);
+
+                    var image = go.AddComponent<Image>();
+                    var rt = go.GetComponent<RectTransform>();
+
+                    image.sprite = sprite;
+
+                    var pos = new Vector2(Random.Range(0, (int)mapSize.x) * GameConstants.CellSize, 
+                        - Random.Range(0, (int)mapSize.y) * GameConstants.CellSize);
+
+                    rt.anchorMax = new Vector2(0, 1);
+                    rt.anchorMin = new Vector2(0, 1);
+                    rt.pivot = new Vector2(0, 1);
+
+                    rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sprite.rect.width);
+                    rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, sprite.rect.width);
+
+                    rt.anchoredPosition = pos;
+                    rt.SetParent(_gameBoardBackgroundLayer, false);
+                }
+            }
+        }
     }
 
 }
