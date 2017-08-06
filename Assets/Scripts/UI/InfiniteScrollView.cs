@@ -44,6 +44,9 @@ public class InfiniteScrollView : MonoBehaviour
     private float _topOffset = 0;
     private bool _initialized = false;
 
+    private RectTransform _tooltipRT;
+    private Text _tooltipText;
+
     public void OnDrag(BaseEventData e)
     {
         PointerEventData ptrEvent = (PointerEventData)e;
@@ -127,6 +130,12 @@ public class InfiniteScrollView : MonoBehaviour
         return entry.GetComponent<InfiniteScrollEntry>();
     }
 
+    public void RegisterTooltipObject(RectTransform tooltip, Text text)
+    {
+        _tooltipRT = tooltip;
+        _tooltipText = text;
+    }
+
     void RearrangeElements()
     {
         if(!_initialized)
@@ -177,6 +186,7 @@ public class InfiniteScrollView : MonoBehaviour
                 for (int i = 0; i < _currentGridWidth; i++)
                 {
                     var entry = _entryPool.GetObject();
+                    entry.RegisterTooltip(_tooltipRT, _tooltipText);
                     entry.TransformHandle.anchoredPosition =
                         new Vector2(alignmentOffset + i * (ElementSize + Spacing.x), lineCursor);
                     entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
@@ -206,6 +216,7 @@ public class InfiniteScrollView : MonoBehaviour
                 for (int i = 0; i < _currentGridHeight; i++)
                 {
                     var entry = _entryPool.GetObject();
+                    entry.RegisterTooltip(_tooltipRT, _tooltipText);
                     entry.TransformHandle.anchoredPosition =
                         new Vector2(lineCursor, -alignmentOffset - i * (ElementSize + Spacing.y));
                     entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
@@ -388,6 +399,7 @@ public class InfiniteScrollView : MonoBehaviour
                     // Get a new entry from the pool.
                     entry = _entryPool.GetObject();
 
+                    entry.RegisterTooltip(_tooltipRT, _tooltipText);
                     entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
                     entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ElementSize);
                     entry.TransformHandle.anchoredPosition = (_landscape) ? 

@@ -27,6 +27,7 @@ namespace RTSDemo
         #endregion
 
         #region SerializedFields
+        [SerializeField] private RectTransform _productionTooltip;
         [SerializeField] private RectTransform _productionMenu;
         [SerializeField] private RectTransform _productionMenuContent;
         [SerializeField] private RectTransform _gameBoard;
@@ -110,6 +111,9 @@ namespace RTSDemo
                     BuildingConstructionStart(this, element.RepresentedType);
                 }
             };
+
+            _productionMenuScrollView.RegisterTooltipObject(_productionTooltip,
+                _productionTooltip.GetComponentInChildren<Text>());
         }
 
         #endregion
