@@ -12,6 +12,7 @@ namespace RTSDemo
     public class InfiniteScrollEntry : MonoBehaviour, IPoolable
     {
         public event Action<InfiniteScrollEntry> Selected;
+        public event Action<PointerEventData> ViewDragged;
 
         private EventTrigger _eventTrigger;
         private GameObject _gameObject;
@@ -83,13 +84,16 @@ namespace RTSDemo
 
             var ptrEnterEvent = new EventTrigger.TriggerEvent();
             var ptrExitEvent = new EventTrigger.TriggerEvent();
+            var ptrDragEvent = new EventTrigger.TriggerEvent();
 
 
             var enterAction = new UnityAction<BaseEventData>(OnPointerEnter);
             var exitAction = new UnityAction<BaseEventData>(OnPointerExit);
+            var dragAction = new UnityAction<BaseEventData>(OnPointerDrag);
 
             ptrEnterEvent.AddListener(enterAction);
             ptrExitEvent.AddListener(exitAction);
+            ptrDragEvent.AddListener(dragAction);
 
             var triggerList = new List<EventTrigger.Entry>()
             {
@@ -102,6 +106,11 @@ namespace RTSDemo
                 {
                     eventID = EventTriggerType.PointerExit,
                     callback = ptrExitEvent
+                },
+                new EventTrigger.Entry()
+                {
+                    eventID = EventTriggerType.Drag,
+                    callback = ptrDragEvent
                 }
             };
 
@@ -142,6 +151,16 @@ namespace RTSDemo
             PointerEventData ptrEvent = (PointerEventData) e;
             _updateTooltip = false;
             _tooltipGO.SetActive(false);
+        }
+
+        public void OnPointerDrag(BaseEventData e)
+        {
+            PointerEventData ptrEvent = (PointerEventData) e;
+
+            if (ViewDragged != null)
+            {
+                ViewDragged.Invoke(ptrEvent);
+            }
         }
 
         private void UpdateTooltipPosition()

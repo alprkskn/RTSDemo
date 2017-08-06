@@ -202,6 +202,8 @@ public class InfiniteScrollView : MonoBehaviour
                         }
                     };
 
+                    entry.ViewDragged += OnDrag;
+
                     _entries.Add(entry);
 
                     elementTypeCursor = (elementTypeCursor + 1) % _availableContentList.Count;
@@ -231,6 +233,7 @@ public class InfiniteScrollView : MonoBehaviour
                             ElementSelected(e.Element);
                         }
                     };
+                    entry.ViewDragged += OnDrag;
 
                     _entries.Add(entry);
 
@@ -394,10 +397,13 @@ public class InfiniteScrollView : MonoBehaviour
                     var entry = lineElements[gridCount * rowInProgress + i];
 
                     // Release the current entry.
+                    entry.ViewDragged -= OnDrag;
                     _entryPool.ReleaseObject(entry);
+
 
                     // Get a new entry from the pool.
                     entry = _entryPool.GetObject();
+                    entry.ViewDragged += OnDrag;
 
                     entry.RegisterTooltip(_tooltipRT, _tooltipText);
                     entry.TransformHandle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ElementSize);
